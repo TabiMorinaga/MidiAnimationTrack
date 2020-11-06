@@ -51,6 +51,16 @@ namespace Klak.Timeline.Midi
             return _stringBuilder.ToString();
         }
 
+        public uint ReadBEUint(byte length)
+        {
+            var number = 0u;
+            for (byte i = 0; i < length; i++)
+            {
+                number += (uint)ReadByte() << (length - i - 1) * 8;
+            }
+            return number;
+        }
+
         public uint ReadBEUInt32()
         {
             uint b1 = ReadByte();

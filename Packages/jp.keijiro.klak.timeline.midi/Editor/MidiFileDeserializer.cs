@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Text;
 
 namespace Klak.Timeline.Midi
 {
@@ -35,10 +34,9 @@ namespace Klak.Timeline.Midi
 
             // Tracks
             var tracks = new MidiAnimationAsset[trackCount];
-            char a = 'a';
-            char.GetUnicodeCategory(a);
+            float? tempo = null;
             for (var i = 0; i < trackCount; i++)
-                tracks[i] = ReadTrack(reader, tpqn);
+                tracks[i] = ReadTrack(reader, tpqn, ref tempo);
 
             // Asset instantiation
             var asset = ScriptableObject.CreateInstance<MidiFileAsset>();
@@ -50,7 +48,7 @@ namespace Klak.Timeline.Midi
 
         #region Private members
 
-        static MidiAnimationAsset ReadTrack(MidiDataStreamReader reader, uint tpqn)
+        static MidiAnimationAsset ReadTrack(MidiDataStreamReader reader, uint tpqn, ref float? tempo)
         {
             // Chunk type
             if (reader.ReadChars(4) != "MTrk")
@@ -76,7 +74,7 @@ namespace Klak.Timeline.Midi
                     stat = reader.ReadByte();
 
                 if (stat == 0xffu)
-                    ReadMetaEvent();
+                    ReadMetaEvent(ref tempo);
                 else if (stat == 0xf0u)
                 {
                     // 0xf0: SysEx (unused)
@@ -92,22 +90,35 @@ namespace Klak.Timeline.Midi
             // Asset instantiation
             var asset = ScriptableObject.CreateInstance<MidiAnimationAsset>();
             asset.name = trackName;
-            asset.template.tempo = 120;
+            asset.template.tempo = tempo ?? 120f;
             asset.template.duration = bars * tpqn * 4;
             asset.template.ticksPerQuarterNote = tpqn;
             asset.template.events = events.ToArray();
             return asset;
 
-            void ReadMetaEvent()
+            void ReadMetaEvent(ref float? tempo_)
             {
                 var eventType = reader.ReadByte();
                 switch (eventType)
                 {
+                    // Track Name
                     case 0x03:
                         var name = reader.ReadText();
                         if (!string.IsNullOrWhiteSpace(name))
                             trackName = name;
                         break;
+                    // Tempo
+                    case 0x51:
+                        if (tempo_ != null)
+                        {
+                            reader.Advance(reader.ReadMultiByteValue());
+                            break;
+                        }
+                        var len = reader.ReadByte();
+                        var time = reader.ReadBEUint(len);
+                        tempo_ = 60000000f / time;
+                        break;
+                    // Ignore
                     default:
                         reader.Advance(reader.ReadMultiByteValue());
                         break;
