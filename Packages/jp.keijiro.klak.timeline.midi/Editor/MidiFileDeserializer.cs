@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Text;
 
 namespace Klak.Timeline.Midi
 {
@@ -34,6 +35,8 @@ namespace Klak.Timeline.Midi
 
             // Tracks
             var tracks = new MidiAnimationAsset[trackCount];
+            char a = 'a';
+            char.GetUnicodeCategory(a);
             for (var i = 0; i < trackCount; i++)
                 tracks[i] = ReadTrack(reader, tpqn);
 
@@ -88,6 +91,7 @@ namespace Klak.Timeline.Midi
 
             // Asset instantiation
             var asset = ScriptableObject.CreateInstance<MidiAnimationAsset>();
+            asset.name = trackName;
             asset.template.tempo = 120;
             asset.template.duration = bars * tpqn * 4;
             asset.template.ticksPerQuarterNote = tpqn;
@@ -100,7 +104,9 @@ namespace Klak.Timeline.Midi
                 switch (eventType)
                 {
                     case 0x03:
-                        trackName = reader.ReadText();
+                        var name = reader.ReadText();
+                        if (!string.IsNullOrWhiteSpace(name))
+                            trackName = name;
                         break;
                     default:
                         reader.Advance(reader.ReadMultiByteValue());
