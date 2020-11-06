@@ -8,7 +8,7 @@ namespace Klak.Timeline.Midi
     [ScriptedImporter(1, "mid")]
     sealed class MidiFileAssetImporter : ScriptedImporter
     {
-        [SerializeField] float _tempo = 120;
+        // [SerializeField] float _tempo = 120;
 
         public override void OnImportAsset(AssetImportContext context)
         {
@@ -25,8 +25,7 @@ namespace Klak.Timeline.Midi
             for (var i = 0; i < asset.tracks.Length; i++)
             {
                 var track = asset.tracks[i];
-                track.name = name + " Track " + (i + 1);
-                track.template.tempo = _tempo;
+                // track.template.tempo = _tempo;
                 context.AddObjectToAsset(track.name, track);
             }
         }
