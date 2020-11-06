@@ -63,18 +63,12 @@ namespace Klak.Timeline.Midi
 
         public uint ReadBEUInt32()
         {
-            uint b1 = ReadByte();
-            uint b2 = ReadByte();
-            uint b3 = ReadByte();
-            uint b4 = ReadByte();
-            return b4 + (b3 << 8) + (b2 << 16) + (b1 << 24);
+            return ReadBEUint(4);
         }
 
         public uint ReadBEUInt16()
         {
-            uint b1 = ReadByte();
-            uint b2 = ReadByte();
-            return b2 + (b1 << 8);
+            return ReadBEUint(2);
         }
 
         public uint ReadMultiByteValue()
