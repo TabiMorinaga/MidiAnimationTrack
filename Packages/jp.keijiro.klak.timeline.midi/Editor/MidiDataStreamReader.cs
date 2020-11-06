@@ -5,14 +5,14 @@ namespace Klak.Timeline.Midi
     {
         #region Internal members
 
-        readonly byte [] _data;
+        readonly byte[] _data;
         readonly System.Text.StringBuilder _stringBuilder;
 
         #endregion
 
         #region Constructor
 
-        public MidiDataStreamReader(byte [] data)
+        public MidiDataStreamReader(byte[] data)
         {
             _data = data;
             _stringBuilder = new System.Text.StringBuilder();
@@ -59,7 +59,7 @@ namespace Klak.Timeline.Midi
             uint b4 = ReadByte();
             return b4 + (b3 << 8) + (b2 << 16) + (b1 << 24);
         }
-        
+
         public uint ReadBEUInt16()
         {
             uint b1 = ReadByte();
@@ -78,6 +78,12 @@ namespace Klak.Timeline.Midi
                 v <<= 7;
             }
             return v;
+        }
+
+        public string ReadText()
+        {
+            var length = ReadByte();
+            return ReadChars(length);
         }
 
         #endregion

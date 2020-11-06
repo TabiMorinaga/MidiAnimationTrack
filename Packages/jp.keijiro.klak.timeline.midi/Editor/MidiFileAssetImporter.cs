@@ -25,7 +25,6 @@ namespace Klak.Timeline.Midi
             for (var i = 0; i < asset.tracks.Length; i++)
             {
                 var track = asset.tracks[i];
-                track.name = name + " Track " + (i + 1);
                 track.template.tempo = _tempo;
                 context.AddObjectToAsset(track.name, track);
             }
