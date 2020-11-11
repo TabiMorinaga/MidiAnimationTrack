@@ -12,13 +12,14 @@ namespace Klak.Timeline.Midi
         public float tempo = 120;
         public uint duration;
         public uint ticksPerQuarterNote = 96;
-        public MidiEvent [] events;
+        public NoteEvent[] events;
 
         #endregion
 
         #region Public properties and methods
 
-        public float DurationInSecond {
+        public float DurationInSecond
+        {
             get { return duration / tempo * 60 / ticksPerQuarterNote; }
         }
 

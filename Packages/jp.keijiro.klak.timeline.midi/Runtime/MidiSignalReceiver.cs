@@ -18,7 +18,7 @@ namespace Klak.Timeline.Midi
 
         public UnityEvent noteOnEvent = new UnityEvent();
         public UnityEvent noteOffEvent = new UnityEvent();
-        public Action<MidiEvent> noteEvent = null;
+        public Action<NoteEvent> noteEvent = null;
 
         public void OnNotify
             (Playable origin, INotification notification, object context)
