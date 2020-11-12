@@ -10,10 +10,10 @@ namespace Klak.Timeline.Midi
         #region Serialized variables
 
         public MidiTrack track;
-        public float tempo = 120;
-        public uint duration;
-        public uint ticksPerQuarterNote = 96;
-        public NoteEvent[] events;
+        public float tempo => track.tempo;
+        public uint duration => track.duration;
+        public uint ticksPerQuarterNote => track.ticksPerQuarterNote;
+        public NoteEvent[] events => track.events;
 
         #endregion
 

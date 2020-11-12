@@ -90,11 +90,6 @@ namespace Klak.Timeline.Midi
             // Asset instantiation
             var asset = ScriptableObject.CreateInstance<MidiAnimationAsset>();
             asset.name = trackName;
-            asset.template.tempo = tempo ?? 120f;
-            asset.template.duration = bars * tpqn * 4;
-            asset.template.ticksPerQuarterNote = tpqn;
-            asset.template.events = events.ToArray();
-
             var track = new MidiTrack()
             {
                 name = trackName,
