@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Klak.Timeline.Midi
 {
     // SMF file deserializer implementation
-    static class MidiFileDeserializer
+    public static class MidiFileDeserializer
     {
         #region Public members
 
