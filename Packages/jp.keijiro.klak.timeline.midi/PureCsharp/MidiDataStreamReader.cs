@@ -1,7 +1,7 @@
 namespace Klak.Timeline.Midi
 {
     // MIDI binary data stream reader
-    public sealed class MidiDataStreamReader
+    sealed class MidiDataStreamReader
     {
         #region Internal members
 

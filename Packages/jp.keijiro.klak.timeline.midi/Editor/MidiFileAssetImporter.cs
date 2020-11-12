@@ -16,7 +16,8 @@ namespace Klak.Timeline.Midi
 
             // Main MIDI file asset
             var buffer = File.ReadAllBytes(context.assetPath);
-            var asset = MidiFileDeserializer.Load(buffer);
+            var tracks = MidiFileDeserializer.Load(buffer);
+            var asset = MidiPlayableTranslator.Translate(tracks);
             asset.name = name;
             context.AddObjectToAsset("MidiFileAsset", asset);
             context.SetMainObject(asset);

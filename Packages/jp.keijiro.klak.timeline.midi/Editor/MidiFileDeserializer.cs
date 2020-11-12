@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Klak.Timeline.Midi
 {
@@ -9,7 +8,7 @@ namespace Klak.Timeline.Midi
     {
         #region Public members
 
-        public static MidiFileAsset Load(byte[] data)
+        public static MidiTrack[] Load(byte[] data)
         {
             var reader = new MidiDataStreamReader(data);
 
@@ -33,22 +32,19 @@ namespace Klak.Timeline.Midi
                 throw new FormatException("SMPTE time code is not supported.");
 
             // Tracks
-            var tracks = new MidiAnimationAsset[trackCount];
+            var tracks = new MidiTrack[trackCount];
             float? tempo = null;
             for (var i = 0; i < trackCount; i++)
                 tracks[i] = ReadTrack(reader, tpqn, ref tempo);
 
-            // Asset instantiation
-            var asset = ScriptableObject.CreateInstance<MidiFileAsset>();
-            asset.tracks = tracks;
-            return asset;
+            return tracks;
         }
 
         #endregion
 
         #region Private members
 
-        static MidiAnimationAsset ReadTrack(MidiDataStreamReader reader, uint tpqn, ref float? tempo)
+        static MidiTrack ReadTrack(MidiDataStreamReader reader, uint tpqn, ref float? tempo)
         {
             // Chunk type
             if (reader.ReadChars(4) != "MTrk")
@@ -88,9 +84,7 @@ namespace Klak.Timeline.Midi
             var bars = (ticks + tpqn * 4 - 1) / (tpqn * 4);
 
             // Asset instantiation
-            var asset = ScriptableObject.CreateInstance<MidiAnimationAsset>();
-            asset.name = trackName;
-            var track = new MidiTrack()
+            return new MidiTrack()
             {
                 name = trackName,
                 tempo = tempo ?? 120f,
@@ -98,8 +92,6 @@ namespace Klak.Timeline.Midi
                 ticksPerQuarterNote = tpqn,
                 events = events.ToArray(),
             };
-            asset.template.Initialize(track);
-            return asset;
 
             void ReadMetaEvent(ref float? tempo_)
             {
