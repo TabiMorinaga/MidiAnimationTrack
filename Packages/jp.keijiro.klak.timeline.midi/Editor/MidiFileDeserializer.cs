@@ -94,6 +94,16 @@ namespace Klak.Timeline.Midi
             asset.template.duration = bars * tpqn * 4;
             asset.template.ticksPerQuarterNote = tpqn;
             asset.template.events = events.ToArray();
+
+            var track = new MidiTrack()
+            {
+                name = trackName,
+                tempo = tempo ?? 120f,
+                duration = bars * tpqn * 4,
+                ticksPerQuarterNote = tpqn,
+                events = events.ToArray(),
+            };
+            asset.template.track = track;
             return asset;
 
             void ReadMetaEvent(ref float? tempo_)

@@ -9,6 +9,7 @@ namespace Klak.Timeline.Midi
     {
         #region Serialized variables
 
+        public MidiTrack track;
         public float tempo = 120;
         public uint duration;
         public uint ticksPerQuarterNote = 96;
@@ -17,6 +18,11 @@ namespace Klak.Timeline.Midi
         #endregion
 
         #region Public properties and methods
+
+        public void Initialize(MidiTrack track)
+        {
+            this.track = track;
+        }
 
         public float DurationInSecond
         {

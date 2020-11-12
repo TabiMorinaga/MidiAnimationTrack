@@ -1,5 +1,6 @@
 ﻿namespace Klak.Timeline.Midi
 {
+    [System.Serializable]
     public class MidiTrack
     {
         #region Serialized variables
