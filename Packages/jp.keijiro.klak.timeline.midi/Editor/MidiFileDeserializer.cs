@@ -98,7 +98,7 @@ namespace Klak.Timeline.Midi
                 ticksPerQuarterNote = tpqn,
                 events = events.ToArray(),
             };
-            asset.template.track = track;
+            asset.template.Initialize(track);
             return asset;
 
             void ReadMetaEvent(ref float? tempo_)

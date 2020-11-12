@@ -3,20 +3,17 @@ using UnityEngine.Playables;
 
 namespace Klak.Timeline.Midi
 {
+    [System.Serializable]
     public class MidiTrackPlayer
     {
-        MidiTrack _track;
-        public MidiTrackPlayer(MidiTrack track)
-        {
-            _track = track;
-        }
+        public MidiTrack track;
 
         #region Serialized variables
 
-        float tempo => _track.tempo;
-        uint duration => _track.duration;
-        uint ticksPerQuarterNote => _track.ticksPerQuarterNote;
-        NoteEvent[] events => _track.events;
+        float tempo => track.tempo;
+        public uint duration => track.duration;
+        uint ticksPerQuarterNote => track.ticksPerQuarterNote;
+        NoteEvent[] events => track.events;
 
         #endregion
 
