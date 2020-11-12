@@ -15,6 +15,16 @@
             get { return duration / tempo * 60 / ticksPerQuarterNote; }
         }
 
+        public uint ConvertSecondToTicks(float time)
+        {
+            return (uint)(time * tempo / 60 * ticksPerQuarterNote);
+        }
+
+        public float ConvertTicksToSecond(uint tick)
+        {
+            return tick * 60 / (tempo * ticksPerQuarterNote);
+        }
+
         #endregion
     }
 }

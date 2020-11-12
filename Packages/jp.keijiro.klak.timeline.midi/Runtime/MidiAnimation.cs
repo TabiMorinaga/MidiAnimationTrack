@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -33,216 +34,218 @@ namespace Klak.Timeline.Midi
 
         public float GetValue(Playable playable, MidiControl control)
         {
-            return player.GetValue(playable, control);
+            if (events == null) return 0;
+            var t = (float)playable.GetTime() % DurationInSecond;
+            if (control.mode == MidiControl.Mode.NoteEnvelope)
+                return GetNoteEnvelopeValue(control, t);
+            else if (control.mode == MidiControl.Mode.NoteCurve)
+                return GetNoteCurveValue(control, t);
+            else // CC
+                return GetCCValue(control, t);
         }
 
         #endregion
 
         #region PlayableBehaviour implementation
 
-        float _previousTime;
+        float previousTime
+        { get => player.previousTime; set => player.previousTime = value; }
 
         public override void OnGraphStart(Playable playable)
         {
-            player.OnGraphStart(playable);
+            previousTime = (float)playable.GetTime();
         }
 
         public override void OnBehaviourPause(Playable playable, FrameData info)
         {
             // When the playable is being finished, signals laying in the rest
             // of the clip should be all triggered.
-            player.OnBehaviourPause(playable, info);
+            if (!playable.IsDone()) return;
+            var duration = (float)playable.GetDuration();
+            var pushAction = GetPushAction(playable, info);
+            TriggerSignals(previousTime, duration, pushAction);
         }
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {
-            player.PrepareFrame(playable, info);
+            var current = (float)playable.GetTime();
+            var pushAction = GetPushAction(playable, info);
+
+            // Playback or scrubbing?
+            if (info.evaluationType == FrameData.EvaluationType.Playback)
+            {
+                // Trigger signals between the prrevious/current time.
+                TriggerSignals(previousTime, current, pushAction);
+            }
+            else
+            {
+                // Maximum allowable time difference for scrubbing
+                const float maxDiff = 0.1f;
+
+                // If the time is increasing and the difference is smaller
+                // than maxDiff, it's being scrubbed.
+                if (current - previousTime < maxDiff)
+                {
+                    // Trigger the signals as usual.
+                    TriggerSignals(previousTime, current, pushAction);
+                }
+                else
+                {
+                    // It's jumping not scrubbed, so trigger signals laying
+                    // around the current frame.
+                    var t0 = Mathf.Max(0, current - maxDiff);
+                    TriggerSignals(t0, current, pushAction);
+                }
+            }
+
+            previousTime = current;
         }
 
         #endregion
 
-        // #region MIDI signal emission
+        #region MIDI signal emission
 
-        // MidiSignalPool _signalPool = new MidiSignalPool();
+        MidiSignalPool _signalPool = new MidiSignalPool();
 
-        // void TriggerSignals
-        //     (Playable playable, PlayableOutput output, float previous, float current)
-        // {
-        //     _signalPool.ResetFrame();
+        Action<NoteEvent> GetPushAction(Playable playable, FrameData info)
+        {
+            return e =>
+                info.output.PushNotification(playable, _signalPool.Allocate(e));
+        }
 
-        //     var t0 = ConvertSecondToTicks(previous);
-        //     var t1 = ConvertSecondToTicks(current);
+        void TriggerSignals(float previous, float current, Action<NoteEvent> onPushEvent)
+        {
+            _signalPool.ResetFrame();
+            player.TriggerSignals(previous, current, onPushEvent);
+        }
 
-        //     // Resolve wrapping-around cases by offsetting.
-        //     if (t1 < t0) t1 += (t0 / duration + 1) * duration;
-
-        //     // Offset both the points to make t0 < duration.
-        //     var offs = (t0 / duration) * duration;
-        //     t0 -= offs;
-        //     t1 -= offs;
-
-        //     // Resolve loops.
-        //     for (; t1 >= duration; t1 -= duration)
-        //     {
-        //         // Trigger signals between t0 and the end of the clip.
-        //         TriggerSignalsTick(playable, output, t0, 0xffffffffu);
-        //         t0 = 0;
-        //     }
-
-        //     // Trigger signals between t0 and t1.
-        //     TriggerSignalsTick(playable, output, t0, t1);
-        // }
-
-        // void TriggerSignalsTick
-        //     (Playable playable, PlayableOutput output, uint previous, uint current)
-        // {
-        //     foreach (var e in events)
-        //     {
-        //         if (e.time >= current) break;
-        //         if (e.time < previous) continue;
-        //         if (!e.IsNote) continue;
-        //         output.PushNotification(playable, _signalPool.Allocate(e));
-        //     }
-        // }
-
-        // #endregion
+        #endregion
 
         // #region Private variables and methods
 
-        // (int i0, int i1) GetCCEventIndexAroundTick(uint tick, int ccNumber)
-        // {
-        //     var last = -1;
-        //     for (var i = 0; i < events.Length; i++)
-        //     {
-        //         ref var e = ref events[i];
-        //         if (!e.IsCC || e.data1 != ccNumber) continue;
-        //         if (e.time > tick) return (last, i);
-        //         last = i;
-        //     }
-        //     return (last, last);
-        // }
+        (int i0, int i1) GetCCEventIndexAroundTick(uint tick, int ccNumber)
+        {
+            var last = -1;
+            for (var i = 0; i < events.Length; i++)
+            {
+                ref var e = ref events[i];
+                if (!e.IsCC || e.data1 != ccNumber) continue;
+                if (e.time > tick) return (last, i);
+                last = i;
+            }
+            return (last, last);
+        }
 
-        // (int iOn, int iOff) GetNoteEventsBeforeTick(uint tick, MidiNoteFilter note)
-        // {
-        //     var iOn = -1;
-        //     var iOff = -1;
-        //     for (var i = 0; i < events.Length; i++)
-        //     {
-        //         ref var e = ref events[i];
-        //         if (e.time > tick) break;
-        //         if (!note.Check(e)) continue;
-        //         if (e.IsNoteOn) iOn = i; else iOff = i;
-        //     }
-        //     return (iOn, iOff);
-        // }
-
-        // uint ConvertSecondToTicks(float time)
-        // {
-        //     return (uint)(time * tempo / 60 * ticksPerQuarterNote);
-        // }
-
-        // float ConvertTicksToSecond(uint tick)
-        // {
-        //     return tick * 60 / (tempo * ticksPerQuarterNote);
-        // }
-
+        (int iOn, int iOff) GetNoteEventsBeforeTick(uint tick, MidiNoteFilter note)
+        {
+            var iOn = -1;
+            var iOff = -1;
+            for (var i = 0; i < events.Length; i++)
+            {
+                ref var e = ref events[i];
+                if (e.time > tick) break;
+                if (!note.Check(e)) continue;
+                if (e.IsNoteOn) iOn = i; else iOff = i;
+            }
+            return (iOn, iOff);
+        }
         // #endregion
 
-        // #region Envelope generator
+        #region Envelope generator
 
-        // float CalculateEnvelope(MidiEnvelope envelope, float onTime, float offTime)
-        // {
-        //     var attackTime = envelope.AttackTime;
-        //     var attackRate = 1 / attackTime;
+        float CalculateEnvelope(MidiEnvelope envelope, float onTime, float offTime)
+        {
+            var attackTime = envelope.AttackTime;
+            var attackRate = 1 / attackTime;
 
-        //     var decayTime = envelope.DecayTime;
-        //     var decayRate = 1 / decayTime;
+            var decayTime = envelope.DecayTime;
+            var decayRate = 1 / decayTime;
 
-        //     var level = -offTime / envelope.ReleaseTime;
+            var level = -offTime / envelope.ReleaseTime;
 
-        //     if (onTime < attackTime)
-        //     {
-        //         level += onTime * attackRate;
-        //     }
-        //     else if (onTime < attackTime + decayTime)
-        //     {
-        //         level += 1 - (onTime - attackTime) * decayRate * (1 - envelope.SustainLevel);
-        //     }
-        //     else
-        //     {
-        //         level += envelope.SustainLevel;
-        //     }
+            if (onTime < attackTime)
+            {
+                level += onTime * attackRate;
+            }
+            else if (onTime < attackTime + decayTime)
+            {
+                level += 1 - (onTime - attackTime) * decayRate * (1 - envelope.SustainLevel);
+            }
+            else
+            {
+                level += envelope.SustainLevel;
+            }
 
-        //     return Mathf.Max(0, level);
-        // }
+            return Mathf.Max(0, level);
+        }
 
-        // #endregion
+        #endregion
 
-        // #region Value calculation methods
+        #region Value calculation methods
 
-        // float GetNoteEnvelopeValue(MidiControl control, float time)
-        // {
-        //     var tick = ConvertSecondToTicks(time);
-        //     var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
+        float GetNoteEnvelopeValue(MidiControl control, float time)
+        {
+            var tick = track.ConvertSecondToTicks(time);
+            var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
 
-        //     if (pair.iOn < 0) return 0;
-        //     ref var eOn = ref events[pair.iOn]; // Note-on event
+            if (pair.iOn < 0) return 0;
+            ref var eOn = ref events[pair.iOn]; // Note-on event
 
-        //     // Note-on time
-        //     var onTime = ConvertTicksToSecond(eOn.time);
+            // Note-on time
+            var onTime = track.ConvertTicksToSecond(eOn.time);
 
-        //     // Note-off time
-        //     var offTime = pair.iOff < 0 || pair.iOff < pair.iOn ?
-        //         time : ConvertTicksToSecond(events[pair.iOff].time);
+            // Note-off time
+            var offTime = pair.iOff < 0 || pair.iOff < pair.iOn ?
+                time : track.ConvertTicksToSecond(events[pair.iOff].time);
 
-        //     var envelope = CalculateEnvelope(
-        //         control.envelope,
-        //         Mathf.Max(0, offTime - onTime),
-        //         Mathf.Max(0, time - offTime)
-        //     );
+            var envelope = CalculateEnvelope(
+                control.envelope,
+                Mathf.Max(0, offTime - onTime),
+                Mathf.Max(0, time - offTime)
+            );
 
-        //     var velocity = eOn.data2 / 127.0f;
+            var velocity = eOn.data2 / 127.0f;
 
-        //     return envelope * velocity;
-        // }
+            return envelope * velocity;
+        }
 
-        // float GetNoteCurveValue(MidiControl control, float time)
-        // {
-        //     var tick = ConvertSecondToTicks(time);
-        //     var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
+        float GetNoteCurveValue(MidiControl control, float time)
+        {
+            var tick = track.ConvertSecondToTicks(time);
+            var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
 
-        //     if (pair.iOn < 0) return 0;
-        //     ref var eOn = ref events[pair.iOn]; // Note-on event
+            if (pair.iOn < 0) return 0;
+            ref var eOn = ref events[pair.iOn]; // Note-on event
 
-        //     // Note-on time
-        //     var onTime = ConvertTicksToSecond(eOn.time);
+            // Note-on time
+            var onTime = track.ConvertTicksToSecond(eOn.time);
 
-        //     var curve = control.curve.Evaluate(Mathf.Max(0, time - onTime));
-        //     var velocity = eOn.data2 / 127.0f;
+            var curve = control.curve.Evaluate(Mathf.Max(0, time - onTime));
+            var velocity = eOn.data2 / 127.0f;
 
-        //     return curve * velocity;
-        // }
+            return curve * velocity;
+        }
 
-        // float GetCCValue(MidiControl control, float time)
-        // {
-        //     var tick = ConvertSecondToTicks(time);
-        //     var pair = GetCCEventIndexAroundTick(tick, control.ccNumber);
+        float GetCCValue(MidiControl control, float time)
+        {
+            var tick = track.ConvertSecondToTicks(time);
+            var pair = GetCCEventIndexAroundTick(tick, control.ccNumber);
 
-        //     if (pair.i0 < 0) return 0;
-        //     if (pair.i1 < 0) return events[pair.i0].data2 / 127.0f;
+            if (pair.i0 < 0) return 0;
+            if (pair.i1 < 0) return events[pair.i0].data2 / 127.0f;
 
-        //     ref var e0 = ref events[pair.i0];
-        //     ref var e1 = ref events[pair.i1];
+            ref var e0 = ref events[pair.i0];
+            ref var e1 = ref events[pair.i1];
 
-        //     var t0 = ConvertTicksToSecond(e0.time);
-        //     var t1 = ConvertTicksToSecond(e1.time);
+            var t0 = track.ConvertTicksToSecond(e0.time);
+            var t1 = track.ConvertTicksToSecond(e1.time);
 
-        //     var v0 = e0.data2 / 127.0f;
-        //     var v1 = e1.data2 / 127.0f;
+            var v0 = e0.data2 / 127.0f;
+            var v1 = e1.data2 / 127.0f;
 
-        //     return Mathf.Lerp(v0, v1, Mathf.Clamp01((time - t0) / (t1 - t0)));
-        // }
+            return Mathf.Lerp(v0, v1, Mathf.Clamp01((time - t0) / (t1 - t0)));
+        }
 
-        // #endregion
+        #endregion
     }
 }
