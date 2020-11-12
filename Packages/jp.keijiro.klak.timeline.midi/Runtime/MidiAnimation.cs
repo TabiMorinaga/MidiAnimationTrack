@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -9,18 +10,27 @@ namespace Klak.Timeline.Midi
     {
         #region Serialized variables
 
-        public float tempo = 120;
-        public uint duration;
-        public uint ticksPerQuarterNote = 96;
-        public MidiEvent [] events;
+        public MidiTrack track;
+        public MidiTrackPlayer player;
+        public float tempo => track.tempo;
+        public uint duration => track.duration;
+        public uint ticksPerQuarterNote => track.ticksPerQuarterNote;
+        public NoteEvent[] events => track.events;
 
         #endregion
 
         #region Public properties and methods
 
-        public float DurationInSecond {
-            get { return duration / tempo * 60 / ticksPerQuarterNote; }
+        public void Initialize(MidiTrack track)
+        {
+            this.track = track;
+            player = new MidiTrackPlayer()
+            {
+                track = track,
+            };
         }
+
+        public float DurationInSecond => track.DurationInSecond;
 
         public float GetValue(Playable playable, MidiControl control)
         {
@@ -38,11 +48,12 @@ namespace Klak.Timeline.Midi
 
         #region PlayableBehaviour implementation
 
-        float _previousTime;
+        float previousTime
+        { get => player.previousTime; set => player.previousTime = value; }
 
         public override void OnGraphStart(Playable playable)
         {
-            _previousTime = (float)playable.GetTime();
+            previousTime = (float)playable.GetTime();
         }
 
         public override void OnBehaviourPause(Playable playable, FrameData info)
@@ -51,18 +62,20 @@ namespace Klak.Timeline.Midi
             // of the clip should be all triggered.
             if (!playable.IsDone()) return;
             var duration = (float)playable.GetDuration();
-            TriggerSignals(playable, info.output, _previousTime, duration);
+            var pushAction = GetPushAction(playable, info);
+            TriggerSignals(previousTime, duration, pushAction);
         }
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {
             var current = (float)playable.GetTime();
+            var pushAction = GetPushAction(playable, info);
 
             // Playback or scrubbing?
             if (info.evaluationType == FrameData.EvaluationType.Playback)
             {
                 // Trigger signals between the prrevious/current time.
-                TriggerSignals(playable, info.output, _previousTime, current);
+                TriggerSignals(previousTime, current, pushAction);
             }
             else
             {
@@ -71,21 +84,21 @@ namespace Klak.Timeline.Midi
 
                 // If the time is increasing and the difference is smaller
                 // than maxDiff, it's being scrubbed.
-                if (current - _previousTime < maxDiff)
+                if (current - previousTime < maxDiff)
                 {
                     // Trigger the signals as usual.
-                    TriggerSignals(playable, info.output, _previousTime, current);
+                    TriggerSignals(previousTime, current, pushAction);
                 }
                 else
                 {
                     // It's jumping not scrubbed, so trigger signals laying
                     // around the current frame.
                     var t0 = Mathf.Max(0, current - maxDiff);
-                    TriggerSignals(playable, info.output, t0, current);
+                    TriggerSignals(t0, current, pushAction);
                 }
             }
 
-            _previousTime = current;
+            previousTime = current;
         }
 
         #endregion
@@ -94,49 +107,21 @@ namespace Klak.Timeline.Midi
 
         MidiSignalPool _signalPool = new MidiSignalPool();
 
-        void TriggerSignals
-            (Playable playable, PlayableOutput output, float previous, float current)
+        Action<NoteEvent> GetPushAction(Playable playable, FrameData info)
         {
-            _signalPool.ResetFrame();
-
-            var t0 = ConvertSecondToTicks(previous);
-            var t1 = ConvertSecondToTicks(current);
-
-            // Resolve wrapping-around cases by offsetting.
-            if (t1 < t0) t1 += (t0 / duration + 1) * duration;
-
-            // Offset both the points to make t0 < duration.
-            var offs = (t0 / duration) * duration;
-            t0 -= offs;
-            t1 -= offs;
-
-            // Resolve loops.
-            for (; t1 >= duration; t1 -= duration)
-            {
-                // Trigger signals between t0 and the end of the clip.
-                TriggerSignalsTick(playable, output, t0, 0xffffffffu);
-                t0 = 0;
-            }
-
-            // Trigger signals between t0 and t1.
-            TriggerSignalsTick(playable, output, t0, t1);
+            return e =>
+                info.output.PushNotification(playable, _signalPool.Allocate(e));
         }
 
-        void TriggerSignalsTick
-            (Playable playable, PlayableOutput output, uint previous, uint current)
+        void TriggerSignals(float previous, float current, Action<NoteEvent> onPushEvent)
         {
-            foreach (var e in events)
-            {
-                if (e.time >= current) break;
-                if (e.time < previous) continue;
-                if (!e.IsNote) continue;
-                output.PushNotification(playable, _signalPool.Allocate(e));
-            }
+            _signalPool.ResetFrame();
+            player.TriggerSignals(previous, current, onPushEvent);
         }
 
         #endregion
 
-        #region Private variables and methods
+        // #region Private variables and methods
 
         (int i0, int i1) GetCCEventIndexAroundTick(uint tick, int ccNumber)
         {
@@ -164,18 +149,7 @@ namespace Klak.Timeline.Midi
             }
             return (iOn, iOff);
         }
-
-        uint ConvertSecondToTicks(float time)
-        {
-            return (uint)(time * tempo / 60 * ticksPerQuarterNote);
-        }
-
-        float ConvertTicksToSecond(uint tick)
-        {
-            return tick * 60 / (tempo * ticksPerQuarterNote);
-        }
-
-        #endregion
+        // #endregion
 
         #region Envelope generator
 
@@ -211,18 +185,18 @@ namespace Klak.Timeline.Midi
 
         float GetNoteEnvelopeValue(MidiControl control, float time)
         {
-            var tick = ConvertSecondToTicks(time);
+            var tick = track.ConvertSecondToTicks(time);
             var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
 
             if (pair.iOn < 0) return 0;
             ref var eOn = ref events[pair.iOn]; // Note-on event
 
             // Note-on time
-            var onTime = ConvertTicksToSecond(eOn.time);
+            var onTime = track.ConvertTicksToSecond(eOn.time);
 
             // Note-off time
             var offTime = pair.iOff < 0 || pair.iOff < pair.iOn ?
-                time : ConvertTicksToSecond(events[pair.iOff].time);
+                time : track.ConvertTicksToSecond(events[pair.iOff].time);
 
             var envelope = CalculateEnvelope(
                 control.envelope,
@@ -237,14 +211,14 @@ namespace Klak.Timeline.Midi
 
         float GetNoteCurveValue(MidiControl control, float time)
         {
-            var tick = ConvertSecondToTicks(time);
+            var tick = track.ConvertSecondToTicks(time);
             var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
 
             if (pair.iOn < 0) return 0;
             ref var eOn = ref events[pair.iOn]; // Note-on event
 
             // Note-on time
-            var onTime = ConvertTicksToSecond(eOn.time);
+            var onTime = track.ConvertTicksToSecond(eOn.time);
 
             var curve = control.curve.Evaluate(Mathf.Max(0, time - onTime));
             var velocity = eOn.data2 / 127.0f;
@@ -254,7 +228,7 @@ namespace Klak.Timeline.Midi
 
         float GetCCValue(MidiControl control, float time)
         {
-            var tick = ConvertSecondToTicks(time);
+            var tick = track.ConvertSecondToTicks(time);
             var pair = GetCCEventIndexAroundTick(tick, control.ccNumber);
 
             if (pair.i0 < 0) return 0;
@@ -263,8 +237,8 @@ namespace Klak.Timeline.Midi
             ref var e0 = ref events[pair.i0];
             ref var e1 = ref events[pair.i1];
 
-            var t0 = ConvertTicksToSecond(e0.time);
-            var t1 = ConvertTicksToSecond(e1.time);
+            var t0 = track.ConvertTicksToSecond(e0.time);
+            var t1 = track.ConvertTicksToSecond(e1.time);
 
             var v0 = e0.data2 / 127.0f;
             var v1 = e1.data2 / 127.0f;

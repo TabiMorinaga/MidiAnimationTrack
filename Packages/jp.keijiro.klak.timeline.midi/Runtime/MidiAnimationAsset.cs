@@ -10,13 +10,15 @@ namespace Klak.Timeline.Midi
     {
         #region Serialized variables
 
-        public MidiAnimation template = new MidiAnimation();
+        [field: SerializeField]
+        public MidiAnimation template { get; private set; } = new MidiAnimation();
 
         #endregion
 
         #region PlayableAsset implementation
 
-        public override double duration {
+        public override double duration
+        {
             get { return template.DurationInSecond; }
         }
 
@@ -24,12 +26,16 @@ namespace Klak.Timeline.Midi
 
         #region ITimelineClipAsset implementation
 
-        public ClipCaps clipCaps { get {
-            return ClipCaps.Blending |
-                   ClipCaps.Extrapolation |
-                   ClipCaps.Looping |
-                   ClipCaps.SpeedMultiplier;
-        } }
+        public ClipCaps clipCaps
+        {
+            get
+            {
+                return ClipCaps.Blending |
+                       ClipCaps.Extrapolation |
+                       ClipCaps.Looping |
+                       ClipCaps.SpeedMultiplier;
+            }
+        }
 
         #endregion
 

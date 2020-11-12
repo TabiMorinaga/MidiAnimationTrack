@@ -6,11 +6,13 @@ namespace Klak.Timeline.Midi
 
     #region Control parameter types
 
-    public enum MidiNote {
+    public enum MidiNote
+    {
         All, C, CSharp, D, DSharp, E, F, FSharp, G, GSharp, A, ASharp, B
     }
 
-    public enum MidiOctave {
+    public enum MidiOctave
+    {
         All, Minus2, Minus1, Zero, Plus1, Plus2, Plus3, Plus4, Plus5, Plus6, Plus7, Plus8
     }
 
@@ -20,11 +22,11 @@ namespace Klak.Timeline.Midi
         public MidiNote note;
         public MidiOctave octave;
 
-        public bool Check(in MidiEvent e)
+        public bool Check(in NoteEvent e)
         {
             return e.IsNote &&
                 (octave == MidiOctave.All || e.data1 / 12 == (int)octave - 1) &&
-                (note   == MidiNote  .All || e.data1 % 12 == (int)note   - 1);
+                (note == MidiNote.All || e.data1 % 12 == (int)note - 1);
         }
     }
 
@@ -38,8 +40,8 @@ namespace Klak.Timeline.Midi
         public float release;
 
         // Times in seconds
-        public float AttackTime  { get { return Mathf.Max(1e-5f, attack  / 10); } }
-        public float DecayTime   { get { return Mathf.Max(1e-5f, decay   / 10); } }
+        public float AttackTime { get { return Mathf.Max(1e-5f, attack / 10); } }
+        public float DecayTime { get { return Mathf.Max(1e-5f, decay / 10); } }
         public float ReleaseTime { get { return Mathf.Max(1e-5f, release / 10); } }
 
         // Normalized sustain level value
@@ -61,13 +63,19 @@ namespace Klak.Timeline.Midi
         public Mode mode = Mode.NoteEnvelope;
 
         // (Note mode) Note filter
-        public MidiNoteFilter noteFilter = new MidiNoteFilter {
-            note = MidiNote.All, octave = MidiOctave.All
+        public MidiNoteFilter noteFilter = new MidiNoteFilter
+        {
+            note = MidiNote.All,
+            octave = MidiOctave.All
         };
 
         // (Note Envelope mode) Envelope parameters
-        public MidiEnvelope envelope = new MidiEnvelope {
-            attack = 0, decay = 1, sustain = 0.5f, release = 1
+        public MidiEnvelope envelope = new MidiEnvelope
+        {
+            attack = 0,
+            decay = 1,
+            sustain = 0.5f,
+            release = 1
         };
 
         // (Note Curve mode) Envelope curve

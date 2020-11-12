@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 namespace Klak.Timeline.Midi
 {
     // SMF file deserializer implementation
-    static class MidiFileDeserializer
+    public static class MidiFileDeserializer
     {
         #region Public members
 
-        public static MidiFileAsset Load(byte[] data)
+        public static MidiTrack[] Load(byte[] data)
         {
             var reader = new MidiDataStreamReader(data);
 
@@ -33,22 +32,19 @@ namespace Klak.Timeline.Midi
                 throw new FormatException("SMPTE time code is not supported.");
 
             // Tracks
-            var tracks = new MidiAnimationAsset[trackCount];
+            var tracks = new MidiTrack[trackCount];
             float? tempo = null;
             for (var i = 0; i < trackCount; i++)
                 tracks[i] = ReadTrack(reader, tpqn, ref tempo);
 
-            // Asset instantiation
-            var asset = ScriptableObject.CreateInstance<MidiFileAsset>();
-            asset.tracks = tracks;
-            return asset;
+            return tracks;
         }
 
         #endregion
 
         #region Private members
 
-        static MidiAnimationAsset ReadTrack(MidiDataStreamReader reader, uint tpqn, ref float? tempo)
+        static MidiTrack ReadTrack(MidiDataStreamReader reader, uint tpqn, ref float? tempo)
         {
             // Chunk type
             if (reader.ReadChars(4) != "MTrk")
@@ -59,7 +55,7 @@ namespace Klak.Timeline.Midi
             chunkEnd += reader.Position;
 
             // MIDI event sequence
-            var events = new List<MidiEvent>();
+            var events = new List<NoteEvent>();
             var ticks = 0u;
             var stat = (byte)0;
             var trackName = "No Name";
@@ -88,13 +84,14 @@ namespace Klak.Timeline.Midi
             var bars = (ticks + tpqn * 4 - 1) / (tpqn * 4);
 
             // Asset instantiation
-            var asset = ScriptableObject.CreateInstance<MidiAnimationAsset>();
-            asset.name = trackName;
-            asset.template.tempo = tempo ?? 120f;
-            asset.template.duration = bars * tpqn * 4;
-            asset.template.ticksPerQuarterNote = tpqn;
-            asset.template.events = events.ToArray();
-            return asset;
+            return new MidiTrack()
+            {
+                name = trackName,
+                tempo = tempo ?? 120f,
+                duration = bars * tpqn * 4,
+                ticksPerQuarterNote = tpqn,
+                events = events.ToArray(),
+            };
 
             void ReadMetaEvent(ref float? tempo_)
             {
@@ -129,7 +126,7 @@ namespace Klak.Timeline.Midi
             {
                 var b1 = reader.ReadByte();
                 var b2 = (stat & 0xe0u) == 0xc0u ? (byte)0 : reader.ReadByte();
-                events.Add(new MidiEvent
+                events.Add(new NoteEvent
                 {
                     time = ticks,
                     status = stat,
