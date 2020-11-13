@@ -10,25 +10,43 @@ namespace Klak.Timeline.Midi
     {
         #region Serialized variables
 
-        public MidiTrack track;
-        public MidiTrackPlayer player;
-        public float tempo => track.tempo;
-        public uint duration => track.duration;
-        public uint ticksPerQuarterNote => track.ticksPerQuarterNote;
-        public NoteEvent[] events => track.events;
+
+        MidiTrack _track;
+        MidiTrack track
+        {
+            get
+            {
+                if (_track != null)
+                    return _track;
+                return _track = new MidiTrack()
+                {
+                    name = trackName,
+                    tempo = tempo,
+                    duration = duration,
+                    ticksPerQuarterNote = ticksPerQuarterNote,
+                    events = events,
+                };
+            }
+        }
+        MidiTrackPlayer _player;
+        MidiTrackPlayer player
+        {
+            get
+            {
+                if (_player != null)
+                    return _player;
+                return _player = new MidiTrackPlayer(track);
+            }
+        }
+        public string trackName;
+        public float tempo = 120;
+        public uint duration;
+        public uint ticksPerQuarterNote = 96;
+        public NoteEvent[] events;
 
         #endregion
 
         #region Public properties and methods
-
-        public void Initialize(MidiTrack track)
-        {
-            this.track = track;
-            player = new MidiTrackPlayer()
-            {
-                track = track,
-            };
-        }
 
         public float DurationInSecond => track.DurationInSecond;
 

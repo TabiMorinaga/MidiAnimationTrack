@@ -11,8 +11,11 @@ namespace Klak.Timeline.Midi
             var animations = tracks.Select(track =>
             {
                 var anim = ScriptableObject.CreateInstance<MidiAnimationAsset>();
-                anim.name = track.name;
-                anim.template.Initialize(track);
+                anim.name = anim.template.trackName = track.name;
+                anim.template.tempo = track.tempo;
+                anim.template.duration = track.duration;
+                anim.template.ticksPerQuarterNote = track.ticksPerQuarterNote;
+                anim.template.events = track.events;
                 return anim;
             }).ToArray();
             // Asset instantiation

@@ -2,12 +2,15 @@
 
 namespace Klak.Timeline.Midi
 {
-    [Serializable]
     public class MidiTrackPlayer
     {
 
         #region Parameters
 
+        public MidiTrackPlayer(MidiTrack track)
+        {
+            this.track = track;
+        }
         public MidiTrack track;
         float tempo => track.tempo;
         public uint duration => track.duration;
