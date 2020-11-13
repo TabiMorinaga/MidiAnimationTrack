@@ -15,7 +15,7 @@ namespace Klak.Timeline.Midi
                 anim.template.tempo = track.tempo;
                 anim.template.duration = track.duration;
                 anim.template.ticksPerQuarterNote = track.ticksPerQuarterNote;
-                anim.template.events = track.events;
+                anim.template.noteEvents = track.events.Cast<NoteEvent>().ToArray();
                 return anim;
             }).ToArray();
             // Asset instantiation

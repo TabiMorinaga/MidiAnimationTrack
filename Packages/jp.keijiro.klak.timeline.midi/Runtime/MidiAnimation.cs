@@ -24,7 +24,7 @@ namespace Klak.Timeline.Midi
                     tempo = tempo,
                     duration = duration,
                     ticksPerQuarterNote = ticksPerQuarterNote,
-                    events = events,
+                    events = noteEvents,
                 };
             }
         }
@@ -42,7 +42,8 @@ namespace Klak.Timeline.Midi
         public float tempo = 120;
         public uint duration;
         public uint ticksPerQuarterNote = 96;
-        public NoteEvent[] events;
+        public NoteEvent[] noteEvents;
+        MidiEvent[] events => track.events;
 
         #endregion
 
@@ -125,13 +126,13 @@ namespace Klak.Timeline.Midi
 
         MidiSignalPool _signalPool = new MidiSignalPool();
 
-        Action<NoteEvent> GetPushAction(Playable playable, FrameData info)
+        Action<MidiEvent> GetPushAction(Playable playable, FrameData info)
         {
             return e =>
                 info.output.PushNotification(playable, _signalPool.Allocate(e));
         }
 
-        void TriggerSignals(float previous, float current, Action<NoteEvent> onPushEvent)
+        void TriggerSignals(float previous, float current, Action<MidiEvent> onPushEvent)
         {
             _signalPool.ResetFrame();
             player.TriggerSignals(previous, current, onPushEvent);
@@ -146,10 +147,12 @@ namespace Klak.Timeline.Midi
             var last = -1;
             for (var i = 0; i < events.Length; i++)
             {
-                ref var e = ref events[i];
-                if (!e.IsCC || e.data1 != ccNumber) continue;
-                if (e.time > tick) return (last, i);
-                last = i;
+                if (events[i] is NoteEvent e)
+                {
+                    if (!e.IsCC || e.data1 != ccNumber) continue;
+                    if (e.time > tick) return (last, i);
+                    last = i;
+                }
             }
             return (last, last);
         }
@@ -160,10 +163,12 @@ namespace Klak.Timeline.Midi
             var iOff = -1;
             for (var i = 0; i < events.Length; i++)
             {
-                ref var e = ref events[i];
-                if (e.time > tick) break;
-                if (!note.Check(e)) continue;
-                if (e.IsNoteOn) iOn = i; else iOff = i;
+                if (events[i] is NoteEvent e)
+                {
+                    if (e.time > tick) break;
+                    if (!note.Check(e)) continue;
+                    if (e.IsNoteOn) iOn = i; else iOff = i;
+                }
             }
             return (iOn, iOff);
         }
@@ -207,7 +212,7 @@ namespace Klak.Timeline.Midi
             var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
 
             if (pair.iOn < 0) return 0;
-            ref var eOn = ref events[pair.iOn]; // Note-on event
+            var eOn = (NoteEvent)events[pair.iOn]; // Note-on event
 
             // Note-on time
             var onTime = track.ConvertTicksToSecond(eOn.time);
@@ -233,7 +238,7 @@ namespace Klak.Timeline.Midi
             var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
 
             if (pair.iOn < 0) return 0;
-            ref var eOn = ref events[pair.iOn]; // Note-on event
+            var eOn = (NoteEvent)events[pair.iOn]; // Note-on event
 
             // Note-on time
             var onTime = track.ConvertTicksToSecond(eOn.time);
@@ -250,10 +255,10 @@ namespace Klak.Timeline.Midi
             var pair = GetCCEventIndexAroundTick(tick, control.ccNumber);
 
             if (pair.i0 < 0) return 0;
-            if (pair.i1 < 0) return events[pair.i0].data2 / 127.0f;
+            if (pair.i1 < 0) return ((NoteEvent)events[pair.i0]).data2 / 127.0f;
 
-            ref var e0 = ref events[pair.i0];
-            ref var e1 = ref events[pair.i1];
+            var e0 = (NoteEvent)events[pair.i0];
+            var e1 = (NoteEvent)events[pair.i1];
 
             var t0 = track.ConvertTicksToSecond(e0.time);
             var t1 = track.ConvertTicksToSecond(e1.time);

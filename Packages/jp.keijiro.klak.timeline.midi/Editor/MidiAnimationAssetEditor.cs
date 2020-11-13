@@ -27,13 +27,13 @@ namespace Klak.Timeline.Midi
             var note = new HashSet<int>();
             var cc = new HashSet<int>();
 
-            foreach (var e in asset.events)
+            foreach (var noteEvent in asset.noteEvents)
             {
-                switch (e.status & 0xf0u)
+                switch (noteEvent.status & 0xf0u)
                 {
                     case 0x80u:
-                    case 0x81u: note.Add(e.data1); break;
-                    case 0xb0u: cc.Add(e.data1); break;
+                    case 0x81u: note.Add(noteEvent.data1); break;
+                    case 0xb0u: cc.Add(noteEvent.data1); break;
                 }
             }
 

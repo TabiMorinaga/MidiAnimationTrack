@@ -18,16 +18,18 @@ namespace Klak.Timeline.Midi
 
         public UnityEvent noteOnEvent = new UnityEvent();
         public UnityEvent noteOffEvent = new UnityEvent();
-        public Action<NoteEvent> noteEvent = null;
+        public Action<MidiEvent> onFireEvent = null;
 
         public void OnNotify
             (Playable origin, INotification notification, object context)
         {
-            var signal = (MidiSignal)notification;
-            if (noteEvent != null)
-                noteEvent(signal.Event);
-            if (!noteFilter.Check(signal.Event)) return;
-            (signal.Event.IsNoteOn ? noteOnEvent : noteOffEvent).Invoke();
+            var midiEvent = ((MidiSignal)notification).Event;
+            if (onFireEvent != null)
+                onFireEvent(midiEvent);
+            if (noteFilter.Check(midiEvent, out var noteEvent))
+            {
+                (noteEvent.IsNoteOn ? noteOnEvent : noteOffEvent).Invoke();
+            }
         }
     }
 }
