@@ -4,7 +4,6 @@
     [System.Serializable]
     public class NoteEvent : MidiEvent
     {
-        public byte status;
         public byte data1;
         public byte data2;
 

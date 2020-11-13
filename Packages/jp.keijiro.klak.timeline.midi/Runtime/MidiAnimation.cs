@@ -10,7 +10,6 @@ namespace Klak.Timeline.Midi
     {
         #region Serialized variables
 
-
         MidiTrack _track;
         MidiTrack track
         {

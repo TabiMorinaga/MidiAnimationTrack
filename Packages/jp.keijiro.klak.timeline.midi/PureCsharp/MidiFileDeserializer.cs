@@ -104,6 +104,16 @@ namespace Klak.Timeline.Midi
                         if (!string.IsNullOrWhiteSpace(name))
                             trackName = name;
                         break;
+                    case 0x05:
+                        var text = reader.ReadText();
+                        var lyricEvent = new LyricEvent()
+                        {
+                            time = ticks,
+                            status = stat,
+                            text = text,
+                        };
+                        UnityEngine.Debug.Log(text);
+                        break;
                     // Tempo
                     case 0x51:
                         if (tempo_ != null)

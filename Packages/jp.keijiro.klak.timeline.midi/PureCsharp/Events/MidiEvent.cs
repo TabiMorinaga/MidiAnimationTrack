@@ -4,5 +4,6 @@ namespace Klak.Timeline.Midi
     public abstract class MidiEvent
     {
         public uint time;
+        public byte status;
     }
 }
