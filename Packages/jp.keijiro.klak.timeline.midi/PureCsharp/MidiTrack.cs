@@ -8,7 +8,7 @@
         public float tempo = 120;
         public uint duration;
         public uint ticksPerQuarterNote = 96;
-        public MidiEvent[] events;
+        public MTrkEvent[] events;
         public float DurationInSecond
         {
             get { return duration / tempo * 60 / ticksPerQuarterNote; }

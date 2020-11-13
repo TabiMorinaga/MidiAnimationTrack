@@ -55,7 +55,7 @@ namespace Klak.Timeline.Midi
             chunkEnd += reader.Position;
 
             // MIDI event sequence
-            var events = new List<NoteEvent>();
+            var events = new List<MidiEvent>();
             var ticks = 0u;
             var stat = (byte)0;
             var trackName = "No Name";
@@ -109,7 +109,6 @@ namespace Klak.Timeline.Midi
                         var lyricEvent = new LyricEvent()
                         {
                             time = ticks,
-                            status = stat,
                             text = text,
                         };
                         UnityEngine.Debug.Log(text);
@@ -136,7 +135,7 @@ namespace Klak.Timeline.Midi
             {
                 var b1 = reader.ReadByte();
                 var b2 = (stat & 0xe0u) == 0xc0u ? (byte)0 : reader.ReadByte();
-                events.Add(new NoteEvent
+                events.Add(new MidiEvent
                 {
                     time = ticks,
                     status = stat,

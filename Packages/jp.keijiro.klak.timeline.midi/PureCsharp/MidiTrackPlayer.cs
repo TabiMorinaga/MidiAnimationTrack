@@ -15,7 +15,7 @@ namespace Klak.Timeline.Midi
         float tempo => track.tempo;
         public uint duration => track.duration;
         uint ticksPerQuarterNote => track.ticksPerQuarterNote;
-        MidiEvent[] events => track.events;
+        MTrkEvent[] events => track.events;
         public float previousTime { get; set; }
 
         #endregion
@@ -24,7 +24,7 @@ namespace Klak.Timeline.Midi
         #region MIDI signal emission
 
         public void TriggerSignals
-            (float previous, float current, Action<MidiEvent> onPushEvent)
+            (float previous, float current, Action<MTrkEvent> onPushEvent)
         {
             var t0 = track.ConvertSecondToTicks(previous);
             var t1 = track.ConvertSecondToTicks(current);
@@ -50,7 +50,7 @@ namespace Klak.Timeline.Midi
 
         }
 
-        void TriggerSignalsTick(uint previous, uint current, Action<MidiEvent> onPushEvent)
+        void TriggerSignalsTick(uint previous, uint current, Action<MTrkEvent> onPushEvent)
         {
             foreach (var e in events)
             {

@@ -10,6 +10,6 @@ namespace Klak.Timeline.Midi
         PropertyName INotification.id { get { return default(PropertyName); } }
 
         // MIDI event
-        public MidiEvent Event { get; set; }
+        public MTrkEvent Event { get; set; }
     }
 }
