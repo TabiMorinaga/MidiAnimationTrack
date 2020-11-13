@@ -43,7 +43,7 @@ namespace Klak.Timeline.Midi
                 return _player = new MidiTrackPlayer(track);
             }
         }
-        MTrkEvent[] events => track.events;
+        MTrkEvent[] mtrkEvents => track.events;
 
         #endregion
 
@@ -53,7 +53,7 @@ namespace Klak.Timeline.Midi
 
         public float GetValue(Playable playable, MidiControl control)
         {
-            if (events == null) return 0;
+            if (mtrkEvents == null) return 0;
             var t = (float)playable.GetTime() % DurationInSecond;
             if (control.mode == MidiControl.Mode.NoteEnvelope)
                 return GetNoteEnvelopeValue(control, t);
@@ -145,9 +145,9 @@ namespace Klak.Timeline.Midi
         (int i0, int i1) GetCCEventIndexAroundTick(uint tick, int ccNumber)
         {
             var last = -1;
-            for (var i = 0; i < events.Length; i++)
+            for (var i = 0; i < mtrkEvents.Length; i++)
             {
-                if (events[i] is MidiEvent e)
+                if (mtrkEvents[i] is MidiEvent e)
                 {
                     if (!e.IsCC || e.data1 != ccNumber) continue;
                     if (e.time > tick) return (last, i);
@@ -161,9 +161,9 @@ namespace Klak.Timeline.Midi
         {
             var iOn = -1;
             var iOff = -1;
-            for (var i = 0; i < events.Length; i++)
+            for (var i = 0; i < mtrkEvents.Length; i++)
             {
-                if (events[i] is MidiEvent e)
+                if (mtrkEvents[i] is MidiEvent e)
                 {
                     if (e.time > tick) break;
                     if (!note.Check(e)) continue;
@@ -212,14 +212,14 @@ namespace Klak.Timeline.Midi
             var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
 
             if (pair.iOn < 0) return 0;
-            var eOn = (MidiEvent)events[pair.iOn]; // Note-on event
+            var eOn = (MidiEvent)mtrkEvents[pair.iOn]; // Note-on event
 
             // Note-on time
             var onTime = track.ConvertTicksToSecond(eOn.time);
 
             // Note-off time
             var offTime = pair.iOff < 0 || pair.iOff < pair.iOn ?
-                time : track.ConvertTicksToSecond(events[pair.iOff].time);
+                time : track.ConvertTicksToSecond(mtrkEvents[pair.iOff].time);
 
             var envelope = CalculateEnvelope(
                 control.envelope,
@@ -238,7 +238,7 @@ namespace Klak.Timeline.Midi
             var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
 
             if (pair.iOn < 0) return 0;
-            var eOn = (MidiEvent)events[pair.iOn]; // Note-on event
+            var eOn = (MidiEvent)mtrkEvents[pair.iOn]; // Note-on event
 
             // Note-on time
             var onTime = track.ConvertTicksToSecond(eOn.time);
@@ -255,10 +255,10 @@ namespace Klak.Timeline.Midi
             var pair = GetCCEventIndexAroundTick(tick, control.ccNumber);
 
             if (pair.i0 < 0) return 0;
-            if (pair.i1 < 0) return ((MidiEvent)events[pair.i0]).data2 / 127.0f;
+            if (pair.i1 < 0) return ((MidiEvent)mtrkEvents[pair.i0]).data2 / 127.0f;
 
-            var e0 = (MidiEvent)events[pair.i0];
-            var e1 = (MidiEvent)events[pair.i1];
+            var e0 = (MidiEvent)mtrkEvents[pair.i0];
+            var e1 = (MidiEvent)mtrkEvents[pair.i1];
 
             var t0 = track.ConvertTicksToSecond(e0.time);
             var t1 = track.ConvertTicksToSecond(e1.time);
