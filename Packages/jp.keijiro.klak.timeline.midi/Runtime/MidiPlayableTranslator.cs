@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Timeline;
 
@@ -15,7 +16,17 @@ namespace Klak.Timeline.Midi
                 anim.template.tempo = track.tempo;
                 anim.template.duration = track.duration;
                 anim.template.ticksPerQuarterNote = track.ticksPerQuarterNote;
-                anim.template.midiEvents = track.events.Cast<MidiEvent>().ToArray();
+                var midiEvents = new List<MidiEvent>();
+                foreach (var e in track.events)
+                {
+                    switch (e)
+                    {
+                        case MidiEvent midiEvent:
+                            midiEvents.Add(midiEvent);
+                            break;
+                    }
+                }
+                anim.template.midiEvents = midiEvents.ToArray();
                 return anim;
             }).ToArray();
             // Asset instantiation

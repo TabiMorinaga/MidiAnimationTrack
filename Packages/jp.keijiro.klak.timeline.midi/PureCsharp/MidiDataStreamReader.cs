@@ -1,3 +1,5 @@
+using System;
+
 namespace Klak.Timeline.Midi
 {
     // MIDI binary data stream reader
@@ -39,6 +41,14 @@ namespace Klak.Timeline.Midi
         public byte ReadByte()
         {
             return _data[Position++];
+        }
+
+        public byte[] ReadBytes(uint len)
+        {
+            var bytes = new byte[len];
+            Buffer.BlockCopy(_data, (int)Position, bytes, 0, (int)len);
+            Position += len;
+            return bytes;
         }
 
         public string ReadChars(int length, int codepage = 932)

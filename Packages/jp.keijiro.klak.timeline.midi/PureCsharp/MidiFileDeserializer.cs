@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Klak.Timeline.Midi
@@ -58,7 +59,6 @@ namespace Klak.Timeline.Midi
             var events = new List<MTrkEvent>();
             var ticks = 0u;
             var stat = (byte)0;
-            var trackName = "No Name";
 
             while (reader.Position < chunkEnd)
             {
@@ -70,21 +70,34 @@ namespace Klak.Timeline.Midi
                     stat = reader.ReadByte();
 
                 if (stat == 0xffu)
-                    ReadMetaEvent(ref tempo);
+                    events.Add(ReadMetaEvent(ticks, stat, reader));
                 else if (stat == 0xf0u)
                 {
                     // 0xf0: SysEx (unused)
                     while (reader.ReadByte() != 0xf7u) { }
                 }
                 else
-                    ReadMidiEvent();
+                    events.Add(ReadMidiEvent(ticks, stat, reader));
             }
 
             // Quantize duration with bars.
             var bars = (ticks + tpqn * 4 - 1) / (tpqn * 4);
-
+            var trackName = "";
+            foreach (var e in events)
+            {
+                switch (e)
+                {
+                    case TrackNameEvent trackNameEvent:
+                        trackName = trackNameEvent.name;
+                        break;
+                    case TempoEvent tempoEvent:
+                        if (tempo == null)
+                            tempo = tempoEvent.tempo;
+                        break;
+                }
+            }
             // Asset instantiation
-            return new MidiTrack()
+            return new MidiTrack
             {
                 name = trackName,
                 tempo = tempo ?? 120f,
@@ -92,59 +105,64 @@ namespace Klak.Timeline.Midi
                 ticksPerQuarterNote = tpqn,
                 events = events.ToArray(),
             };
+        }
 
-            void ReadMetaEvent(ref float? tempo_)
+        #endregion
+
+        static MTrkEvent ReadMetaEvent(uint ticks, byte stat, MidiDataStreamReader reader)
+        {
+            var eventType = reader.ReadByte();
+            switch (eventType)
             {
-                var eventType = reader.ReadByte();
-                switch (eventType)
-                {
-                    // Track Name
-                    case 0x03:
-                        var name = reader.ReadText();
-                        if (!string.IsNullOrWhiteSpace(name))
-                            trackName = name;
-                        break;
-                    // Lyric
-                    case 0x05:
-                        var text = reader.ReadText();
-                        var a = new LyricEvent()
-                        {
-                            time = ticks,
-                            text = text,
-                        };
-                        break;
-                    // Tempo
-                    case 0x51:
-                        if (tempo_ != null)
-                        {
-                            reader.Advance(reader.ReadMultiByteValue());
-                            break;
-                        }
-                        var len = reader.ReadByte();
-                        var time = reader.ReadBEUint(len);
-                        tempo_ = 60000000f / time;
-                        break;
-                    // Ignore
-                    default:
-                        reader.Advance(reader.ReadMultiByteValue());
-                        break;
-                }
+                // Track Name
+                case 0x03:
+                    var name = reader.ReadText();
+                    return new TrackNameEvent
+                    {
+                        time = ticks,
+                        name = name,
+                    };
+                // Lyric
+                case 0x05:
+                    var text = reader.ReadText();
+                    return new LyricEvent
+                    {
+                        time = ticks,
+                        text = text,
+                    };
+                // Tempo
+                case 0x51:
+                    var len = reader.ReadByte();
+                    var tickTempo = reader.ReadBEUint(len);
+                    return new TempoEvent
+                    {
+                        time = ticks,
+                        tickTempo = tickTempo,
+                    };
+                // Ignore
+                default:
+                    var length = reader.ReadMultiByteValue();
+                    var bytes = reader.ReadBytes(length);
+                    return new UnknownEvent
+                    {
+                        time = ticks,
+                        length = length,
+                        bytes = bytes,
+                    };
             }
+        }
 
-            void ReadMidiEvent()
+        static MidiEvent ReadMidiEvent(uint ticks, byte stat, MidiDataStreamReader reader)
+        {
+            var b1 = reader.ReadByte();
+            var b2 = (stat & 0xe0u) == 0xc0u ? (byte)0 : reader.ReadByte();
+            return new MidiEvent
             {
-                var b1 = reader.ReadByte();
-                var b2 = (stat & 0xe0u) == 0xc0u ? (byte)0 : reader.ReadByte();
-                events.Add(new MidiEvent
-                {
-                    time = ticks,
-                    status = stat,
-                    data1 = b1,
-                    data2 = b2
-                });
-            }
-
-            #endregion
+                time = ticks,
+                status = stat,
+                data1 = b1,
+                data2 = b2
+            };
         }
     }
 }
