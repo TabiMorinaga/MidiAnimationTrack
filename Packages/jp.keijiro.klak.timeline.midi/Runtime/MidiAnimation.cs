@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -30,7 +32,7 @@ namespace Klak.Timeline.Midi
                     tempo = tempo,
                     duration = duration,
                     ticksPerQuarterNote = ticksPerQuarterNote,
-                    events = midiEvents,
+                    events = midiEvents.Cast<MTrkEvent>().ToList(),
                 };
             }
         }
@@ -44,7 +46,7 @@ namespace Klak.Timeline.Midi
                 return _player = new MidiTrackPlayer(track);
             }
         }
-        MTrkEvent[] mtrkEvents => track.events;
+        List<MTrkEvent> mtrkEvents => track.events;
 
         #endregion
 
@@ -146,7 +148,7 @@ namespace Klak.Timeline.Midi
         (int i0, int i1) GetCCEventIndexAroundTick(uint tick, int ccNumber)
         {
             var last = -1;
-            for (var i = 0; i < mtrkEvents.Length; i++)
+            for (var i = 0; i < mtrkEvents.Count; i++)
             {
                 if (mtrkEvents[i] is MidiEvent e)
                 {
@@ -162,7 +164,7 @@ namespace Klak.Timeline.Midi
         {
             var iOn = -1;
             var iOff = -1;
-            for (var i = 0; i < mtrkEvents.Length; i++)
+            for (var i = 0; i < mtrkEvents.Count; i++)
             {
                 if (mtrkEvents[i] is MidiEvent e)
                 {

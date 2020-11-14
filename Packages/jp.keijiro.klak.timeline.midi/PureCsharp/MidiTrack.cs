@@ -1,14 +1,16 @@
-﻿namespace Klak.Timeline.Midi
+﻿using System.Collections.Generic;
+
+namespace Klak.Timeline.Midi
 {
     public class MidiTrack
     {
         #region Serialized variables
 
-        public string name = "No Name";
+        public string name = "";
         public float tempo = 120;
         public uint duration;
         public uint ticksPerQuarterNote = 96;
-        public MTrkEvent[] events;
+        public List<MTrkEvent> events = new List<MTrkEvent>();
         public float DurationInSecond
             => duration / tempo * 60 / ticksPerQuarterNote;
 

@@ -12,10 +12,7 @@ namespace Klak.Timeline.Midi
             this.track = track;
         }
         public MidiTrack track;
-        float tempo => track.tempo;
-        public uint duration => track.duration;
-        uint ticksPerQuarterNote => track.ticksPerQuarterNote;
-        MTrkEvent[] events => track.events;
+        uint duration => track.duration;
         public float previousTime { get; set; }
 
         #endregion
@@ -52,7 +49,7 @@ namespace Klak.Timeline.Midi
 
         void TriggerSignalsTick(uint previous, uint current, Action<MTrkEvent> onPushEvent)
         {
-            foreach (var e in events)
+            foreach (var e in track.events)
             {
                 if (e.time >= current) break;
                 if (e.time < previous) continue;

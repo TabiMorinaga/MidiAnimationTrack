@@ -17,6 +17,7 @@ namespace Klak.Timeline.Midi
                 anim.template.duration = track.duration;
                 anim.template.ticksPerQuarterNote = track.ticksPerQuarterNote;
                 var midiEvents = new List<MidiEvent>();
+                var lyricEvents = new List<LyricEvent>();
                 foreach (var e in track.events)
                 {
                     switch (e)
@@ -24,9 +25,13 @@ namespace Klak.Timeline.Midi
                         case MidiEvent midiEvent:
                             midiEvents.Add(midiEvent);
                             break;
+                        case LyricEvent lyricEvent:
+                            lyricEvents.Add(lyricEvent);
+                            break;
                     }
                 }
                 anim.template.midiEvents = midiEvents.ToArray();
+                anim.template.lyricEvents = lyricEvents.ToArray();
                 return anim;
             }).ToArray();
             // Asset instantiation

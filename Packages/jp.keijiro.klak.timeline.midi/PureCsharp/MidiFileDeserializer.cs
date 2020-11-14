@@ -103,7 +103,7 @@ namespace Klak.Timeline.Midi
                 tempo = tempo ?? 120f,
                 duration = bars * tpqn * 4,
                 ticksPerQuarterNote = tpqn,
-                events = events.ToArray(),
+                events = events,
             };
         }
 
