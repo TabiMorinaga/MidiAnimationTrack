@@ -26,6 +26,7 @@ namespace Klak.Timeline.Midi
             {
                 if (_track != null)
                     return _track;
+                var mtrkEvents = new List<MTrkEvent>();
                 return _track = new MidiTrack()
                 {
                     name = trackName,
@@ -33,9 +34,11 @@ namespace Klak.Timeline.Midi
                     duration = duration,
                     ticksPerQuarterNote = ticksPerQuarterNote,
                     events = midiEvents.Cast<MTrkEvent>().ToList(),
+                    // events = lyricEvents.Cast<MTrkEvent>().ToList(),
                 };
             }
         }
+
         MidiTrackPlayer _player;
         MidiTrackPlayer player
         {

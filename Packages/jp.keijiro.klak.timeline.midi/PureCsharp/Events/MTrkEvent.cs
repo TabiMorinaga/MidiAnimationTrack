@@ -4,5 +4,6 @@ namespace Klak.Timeline.Midi
     public abstract class MTrkEvent
     {
         public uint time;
+        public uint ticks;
     }
 }

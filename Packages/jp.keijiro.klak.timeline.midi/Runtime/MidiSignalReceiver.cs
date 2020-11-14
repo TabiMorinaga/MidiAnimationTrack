@@ -24,6 +24,8 @@ namespace Klak.Timeline.Midi
             (Playable origin, INotification notification, object context)
         {
             var mtrkEvent = ((MidiSignal)notification).Event;
+            // if (mtrkEvent is LyricEvent lyricEvent)
+            //     UnityEngine.Debug.Log(lyricEvent.text);
             if (onFireEvent != null)
                 onFireEvent(mtrkEvent);
             if (noteFilter.Check(mtrkEvent, out var noteEvent))

@@ -57,31 +57,32 @@ namespace Klak.Timeline.Midi
 
             // MIDI event sequence
             var events = new List<MTrkEvent>();
-            var ticks = 0u;
+            var allTicks = 0u;
             var stat = (byte)0;
 
             while (reader.Position < chunkEnd)
             {
                 // Delta time
-                ticks += reader.ReadMultiByteValue();
+                var ticks = reader.ReadMultiByteValue();
+                allTicks += ticks;
 
                 // Status byte
                 if ((reader.PeekByte() & 0x80u) != 0)
                     stat = reader.ReadByte();
 
                 if (stat == 0xffu)
-                    events.Add(ReadMetaEvent(ticks, stat, reader));
+                    events.Add(ReadMetaEvent(allTicks, ticks, stat, reader));
                 else if (stat == 0xf0u)
                 {
                     // 0xf0: SysEx (unused)
                     while (reader.ReadByte() != 0xf7u) { }
                 }
                 else
-                    events.Add(ReadMidiEvent(ticks, stat, reader));
+                    events.Add(ReadMidiEvent(allTicks, ticks, stat, reader));
             }
 
             // Quantize duration with bars.
-            var bars = (ticks + tpqn * 4 - 1) / (tpqn * 4);
+            var bars = (allTicks + tpqn * 4 - 1) / (tpqn * 4);
             var trackName = "";
             foreach (var e in events)
             {
@@ -109,7 +110,7 @@ namespace Klak.Timeline.Midi
 
         #endregion
 
-        static MTrkEvent ReadMetaEvent(uint ticks, byte stat, MidiDataStreamReader reader)
+        static MTrkEvent ReadMetaEvent(uint allTicks, uint ticks, byte stat, MidiDataStreamReader reader)
         {
             var eventType = reader.ReadByte();
             switch (eventType)
@@ -119,7 +120,8 @@ namespace Klak.Timeline.Midi
                     var name = reader.ReadText();
                     return new TrackNameEvent
                     {
-                        time = ticks,
+                        time = allTicks,
+                        ticks = ticks,
                         name = name,
                     };
                 // Lyric
@@ -127,7 +129,8 @@ namespace Klak.Timeline.Midi
                     var text = reader.ReadText();
                     return new LyricEvent
                     {
-                        time = ticks,
+                        time = allTicks,
+                        ticks = ticks,
                         text = text,
                     };
                 // Tempo
@@ -136,7 +139,8 @@ namespace Klak.Timeline.Midi
                     var tickTempo = reader.ReadBEUint(len);
                     return new TempoEvent
                     {
-                        time = ticks,
+                        time = allTicks,
+                        ticks = ticks,
                         tickTempo = tickTempo,
                     };
                 // Ignore
@@ -145,20 +149,22 @@ namespace Klak.Timeline.Midi
                     var bytes = reader.ReadBytes(length);
                     return new UnknownEvent
                     {
-                        time = ticks,
+                        time = allTicks,
+                        ticks = ticks,
                         length = length,
                         bytes = bytes,
                     };
             }
         }
 
-        static MidiEvent ReadMidiEvent(uint ticks, byte stat, MidiDataStreamReader reader)
+        static MidiEvent ReadMidiEvent(uint allTicks, uint ticks, byte stat, MidiDataStreamReader reader)
         {
             var b1 = reader.ReadByte();
             var b2 = (stat & 0xe0u) == 0xc0u ? (byte)0 : reader.ReadByte();
             return new MidiEvent
             {
-                time = ticks,
+                time = allTicks,
+                ticks = ticks,
                 status = stat,
                 data1 = b1,
                 data2 = b2
