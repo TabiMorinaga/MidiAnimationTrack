@@ -10,19 +10,13 @@
         public uint ticksPerQuarterNote = 96;
         public MTrkEvent[] events;
         public float DurationInSecond
-        {
-            get { return duration / tempo * 60 / ticksPerQuarterNote; }
-        }
+            => duration / tempo * 60 / ticksPerQuarterNote;
 
         public uint ConvertSecondToTicks(float time)
-        {
-            return (uint)(time * tempo / 60 * ticksPerQuarterNote);
-        }
+            => (uint)(time * tempo / 60 * ticksPerQuarterNote);
 
         public float ConvertTicksToSecond(uint tick)
-        {
-            return tick * 60 / (tempo * ticksPerQuarterNote);
-        }
+            => tick * 60 / (tempo * ticksPerQuarterNote);
 
         #endregion
     }

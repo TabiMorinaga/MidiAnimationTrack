@@ -55,7 +55,7 @@ namespace Klak.Timeline.Midi
             chunkEnd += reader.Position;
 
             // MIDI event sequence
-            var events = new List<MidiEvent>();
+            var events = new List<MTrkEvent>();
             var ticks = 0u;
             var stat = (byte)0;
             var trackName = "No Name";
@@ -104,14 +104,14 @@ namespace Klak.Timeline.Midi
                         if (!string.IsNullOrWhiteSpace(name))
                             trackName = name;
                         break;
+                    // Lyric
                     case 0x05:
                         var text = reader.ReadText();
-                        var lyricEvent = new LyricEvent()
+                        var a = new LyricEvent()
                         {
                             time = ticks,
                             text = text,
                         };
-                        UnityEngine.Debug.Log(text);
                         break;
                     // Tempo
                     case 0x51:

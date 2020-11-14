@@ -15,6 +15,7 @@ namespace Klak.Timeline.Midi
         public uint duration;
         public uint ticksPerQuarterNote = 96;
         public MidiEvent[] midiEvents;
+        public LyricEvent[] lyricEvents;
 
         MidiTrack _track;
         MidiTrack track
