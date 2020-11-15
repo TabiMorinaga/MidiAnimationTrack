@@ -9,7 +9,7 @@ namespace Klak.Timeline.Midi
         Stack<MidiSignal> _usedSignals = new Stack<MidiSignal>();
         Stack<MidiSignal> _freeSignals = new Stack<MidiSignal>();
 
-        public MidiSignal Allocate(in NoteEvent data)
+        public MidiSignal Allocate(MTrkEvent data)
         {
             var signal = _freeSignals.Count > 0 ? _freeSignals.Pop() : new MidiSignal();
             signal.Event = data;

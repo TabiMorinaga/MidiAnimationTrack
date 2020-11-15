@@ -22,7 +22,27 @@ namespace Klak.Timeline.Midi
         public MidiNote note;
         public MidiOctave octave;
 
-        public bool Check(in NoteEvent e)
+        public bool Check(MTrkEvent e)
+        {
+            if (e is MidiEvent midiEvent)
+                return Check(midiEvent);
+            else
+                return false;
+        }
+        public bool Check(MTrkEvent e, out MidiEvent noteEvent)
+        {
+            if (e is MidiEvent ne)
+            {
+                noteEvent = ne;
+                return Check(ne);
+            }
+            else
+            {
+                noteEvent = null;
+                return false;
+            }
+        }
+        public bool Check(MidiEvent e)
         {
             return e.IsNote &&
                 (octave == MidiOctave.All || e.data1 / 12 == (int)octave - 1) &&

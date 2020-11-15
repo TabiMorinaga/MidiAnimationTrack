@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 
 namespace Klak.Timeline.Midi
@@ -55,87 +56,119 @@ namespace Klak.Timeline.Midi
             chunkEnd += reader.Position;
 
             // MIDI event sequence
-            var events = new List<NoteEvent>();
-            var ticks = 0u;
+            var events = new List<MTrkEvent>();
+            var allTicks = 0u;
             var stat = (byte)0;
-            var trackName = "No Name";
 
             while (reader.Position < chunkEnd)
             {
                 // Delta time
-                ticks += reader.ReadMultiByteValue();
+                var ticks = reader.ReadMultiByteValue();
+                allTicks += ticks;
 
                 // Status byte
                 if ((reader.PeekByte() & 0x80u) != 0)
                     stat = reader.ReadByte();
 
                 if (stat == 0xffu)
-                    ReadMetaEvent(ref tempo);
+                    events.Add(ReadMetaEvent(allTicks, ticks, stat, reader));
                 else if (stat == 0xf0u)
                 {
                     // 0xf0: SysEx (unused)
                     while (reader.ReadByte() != 0xf7u) { }
                 }
                 else
-                    ReadMidiEvent();
+                    events.Add(ReadMidiEvent(allTicks, ticks, stat, reader));
             }
 
             // Quantize duration with bars.
-            var bars = (ticks + tpqn * 4 - 1) / (tpqn * 4);
-
+            var bars = (allTicks + tpqn * 4 - 1) / (tpqn * 4);
+            var trackName = "";
+            foreach (var e in events)
+            {
+                switch (e)
+                {
+                    case TrackNameEvent trackNameEvent:
+                        trackName = trackNameEvent.name;
+                        break;
+                    case TempoEvent tempoEvent:
+                        if (tempo == null)
+                            tempo = tempoEvent.tempo;
+                        break;
+                }
+            }
             // Asset instantiation
-            return new MidiTrack()
+            return new MidiTrack
             {
                 name = trackName,
                 tempo = tempo ?? 120f,
                 duration = bars * tpqn * 4,
                 ticksPerQuarterNote = tpqn,
-                events = events.ToArray(),
+                events = events,
             };
+        }
 
-            void ReadMetaEvent(ref float? tempo_)
+        #endregion
+
+        static MTrkEvent ReadMetaEvent(uint allTicks, uint ticks, byte stat, MidiDataStreamReader reader)
+        {
+            var eventType = reader.ReadByte();
+            switch (eventType)
             {
-                var eventType = reader.ReadByte();
-                switch (eventType)
-                {
-                    // Track Name
-                    case 0x03:
-                        var name = reader.ReadText();
-                        if (!string.IsNullOrWhiteSpace(name))
-                            trackName = name;
-                        break;
-                    // Tempo
-                    case 0x51:
-                        if (tempo_ != null)
-                        {
-                            reader.Advance(reader.ReadMultiByteValue());
-                            break;
-                        }
-                        var len = reader.ReadByte();
-                        var time = reader.ReadBEUint(len);
-                        tempo_ = 60000000f / time;
-                        break;
-                    // Ignore
-                    default:
-                        reader.Advance(reader.ReadMultiByteValue());
-                        break;
-                }
+                // Track Name
+                case 0x03:
+                    var name = reader.ReadText();
+                    return new TrackNameEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        name = name,
+                    };
+                // Lyric
+                case 0x05:
+                    var text = reader.ReadText();
+                    return new LyricEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        text = text,
+                    };
+                // Tempo
+                case 0x51:
+                    var len = reader.ReadByte();
+                    var tickTempo = reader.ReadBEUint(len);
+                    return new TempoEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        tickTempo = tickTempo,
+                    };
+                // Ignore
+                default:
+                    var length = reader.ReadMultiByteValue();
+                    var bytes = reader.ReadBytes(length);
+                    return new UnknownEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        length = length,
+                        bytes = bytes,
+                    };
             }
+        }
 
-            void ReadMidiEvent()
+        static MidiEvent ReadMidiEvent(uint allTicks, uint ticks, byte stat, MidiDataStreamReader reader)
+        {
+            var b1 = reader.ReadByte();
+            var b2 = (stat & 0xe0u) == 0xc0u ? (byte)0 : reader.ReadByte();
+            return new MidiEvent
             {
-                var b1 = reader.ReadByte();
-                var b2 = (stat & 0xe0u) == 0xc0u ? (byte)0 : reader.ReadByte();
-                events.Add(new NoteEvent
-                {
-                    time = ticks,
-                    status = stat,
-                    data1 = b1,
-                    data2 = b2
-                });
-            }
-
-            #endregion
+                time = allTicks,
+                ticks = ticks,
+                status = stat,
+                data1 = b1,
+                data2 = b2
+            };
         }
     }
 }

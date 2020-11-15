@@ -1,3 +1,5 @@
+using System;
+
 namespace Klak.Timeline.Midi
 {
     // MIDI binary data stream reader
@@ -6,7 +8,6 @@ namespace Klak.Timeline.Midi
         #region Internal members
 
         readonly byte[] _data;
-        readonly System.Text.StringBuilder _stringBuilder;
 
         #endregion
 
@@ -15,7 +16,6 @@ namespace Klak.Timeline.Midi
         public MidiDataStreamReader(byte[] data)
         {
             _data = data;
-            _stringBuilder = new System.Text.StringBuilder();
         }
 
         #endregion
@@ -43,12 +43,20 @@ namespace Klak.Timeline.Midi
             return _data[Position++];
         }
 
-        public string ReadChars(int length)
+        public byte[] ReadBytes(uint len)
         {
-            _stringBuilder.Clear();
+            var bytes = new byte[len];
+            Buffer.BlockCopy(_data, (int)Position, bytes, 0, (int)len);
+            Position += len;
+            return bytes;
+        }
+
+        public string ReadChars(int length, int codepage = 932)
+        {
+            var bytesData = new byte[length];
             for (var i = 0; i < length; i++)
-                _stringBuilder.Append((char)ReadByte());
-            return _stringBuilder.ToString();
+                bytesData[i] = ReadByte();
+            return System.Text.Encoding.GetEncoding(codepage).GetString(bytesData);
         }
 
         public uint ReadBEUint(byte length)

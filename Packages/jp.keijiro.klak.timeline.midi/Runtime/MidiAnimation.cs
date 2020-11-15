@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -10,31 +12,54 @@ namespace Klak.Timeline.Midi
     {
         #region Serialized variables
 
-        public MidiTrack track;
-        public MidiTrackPlayer player;
-        public float tempo => track.tempo;
-        public uint duration => track.duration;
-        public uint ticksPerQuarterNote => track.ticksPerQuarterNote;
-        public NoteEvent[] events => track.events;
+        public string trackName;
+        public float tempo = 120;
+        public uint duration;
+        public uint ticksPerQuarterNote = 96;
+        public MidiEvent[] midiEvents;
+        public LyricEvent[] lyricEvents;
+
+        MidiTrack _track;
+        MidiTrack track
+        {
+            get
+            {
+                if (_track != null)
+                    return _track;
+                var mtrkEvents = new List<MTrkEvent>();
+                return _track = new MidiTrack()
+                {
+                    name = trackName,
+                    tempo = tempo,
+                    duration = duration,
+                    ticksPerQuarterNote = ticksPerQuarterNote,
+                    events = midiEvents.Cast<MTrkEvent>().ToList(),
+                    // events = lyricEvents.Cast<MTrkEvent>().ToList(),
+                };
+            }
+        }
+
+        MidiTrackPlayer _player;
+        MidiTrackPlayer player
+        {
+            get
+            {
+                if (_player != null)
+                    return _player;
+                return _player = new MidiTrackPlayer(track);
+            }
+        }
+        List<MTrkEvent> mtrkEvents => track.events;
 
         #endregion
 
         #region Public properties and methods
 
-        public void Initialize(MidiTrack track)
-        {
-            this.track = track;
-            player = new MidiTrackPlayer()
-            {
-                track = track,
-            };
-        }
-
         public float DurationInSecond => track.DurationInSecond;
 
         public float GetValue(Playable playable, MidiControl control)
         {
-            if (events == null) return 0;
+            if (mtrkEvents == null) return 0;
             var t = (float)playable.GetTime() % DurationInSecond;
             if (control.mode == MidiControl.Mode.NoteEnvelope)
                 return GetNoteEnvelopeValue(control, t);
@@ -107,13 +132,13 @@ namespace Klak.Timeline.Midi
 
         MidiSignalPool _signalPool = new MidiSignalPool();
 
-        Action<NoteEvent> GetPushAction(Playable playable, FrameData info)
+        Action<MTrkEvent> GetPushAction(Playable playable, FrameData info)
         {
             return e =>
                 info.output.PushNotification(playable, _signalPool.Allocate(e));
         }
 
-        void TriggerSignals(float previous, float current, Action<NoteEvent> onPushEvent)
+        void TriggerSignals(float previous, float current, Action<MTrkEvent> onPushEvent)
         {
             _signalPool.ResetFrame();
             player.TriggerSignals(previous, current, onPushEvent);
@@ -126,12 +151,14 @@ namespace Klak.Timeline.Midi
         (int i0, int i1) GetCCEventIndexAroundTick(uint tick, int ccNumber)
         {
             var last = -1;
-            for (var i = 0; i < events.Length; i++)
+            for (var i = 0; i < mtrkEvents.Count; i++)
             {
-                ref var e = ref events[i];
-                if (!e.IsCC || e.data1 != ccNumber) continue;
-                if (e.time > tick) return (last, i);
-                last = i;
+                if (mtrkEvents[i] is MidiEvent e)
+                {
+                    if (!e.IsCC || e.data1 != ccNumber) continue;
+                    if (e.time > tick) return (last, i);
+                    last = i;
+                }
             }
             return (last, last);
         }
@@ -140,12 +167,14 @@ namespace Klak.Timeline.Midi
         {
             var iOn = -1;
             var iOff = -1;
-            for (var i = 0; i < events.Length; i++)
+            for (var i = 0; i < mtrkEvents.Count; i++)
             {
-                ref var e = ref events[i];
-                if (e.time > tick) break;
-                if (!note.Check(e)) continue;
-                if (e.IsNoteOn) iOn = i; else iOff = i;
+                if (mtrkEvents[i] is MidiEvent e)
+                {
+                    if (e.time > tick) break;
+                    if (!note.Check(e)) continue;
+                    if (e.IsNoteOn) iOn = i; else iOff = i;
+                }
             }
             return (iOn, iOff);
         }
@@ -189,14 +218,14 @@ namespace Klak.Timeline.Midi
             var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
 
             if (pair.iOn < 0) return 0;
-            ref var eOn = ref events[pair.iOn]; // Note-on event
+            var eOn = (MidiEvent)mtrkEvents[pair.iOn]; // Note-on event
 
             // Note-on time
             var onTime = track.ConvertTicksToSecond(eOn.time);
 
             // Note-off time
             var offTime = pair.iOff < 0 || pair.iOff < pair.iOn ?
-                time : track.ConvertTicksToSecond(events[pair.iOff].time);
+                time : track.ConvertTicksToSecond(mtrkEvents[pair.iOff].time);
 
             var envelope = CalculateEnvelope(
                 control.envelope,
@@ -215,7 +244,7 @@ namespace Klak.Timeline.Midi
             var pair = GetNoteEventsBeforeTick(tick, control.noteFilter);
 
             if (pair.iOn < 0) return 0;
-            ref var eOn = ref events[pair.iOn]; // Note-on event
+            var eOn = (MidiEvent)mtrkEvents[pair.iOn]; // Note-on event
 
             // Note-on time
             var onTime = track.ConvertTicksToSecond(eOn.time);
@@ -232,10 +261,10 @@ namespace Klak.Timeline.Midi
             var pair = GetCCEventIndexAroundTick(tick, control.ccNumber);
 
             if (pair.i0 < 0) return 0;
-            if (pair.i1 < 0) return events[pair.i0].data2 / 127.0f;
+            if (pair.i1 < 0) return ((MidiEvent)mtrkEvents[pair.i0]).data2 / 127.0f;
 
-            ref var e0 = ref events[pair.i0];
-            ref var e1 = ref events[pair.i1];
+            var e0 = (MidiEvent)mtrkEvents[pair.i0];
+            var e1 = (MidiEvent)mtrkEvents[pair.i1];
 
             var t0 = track.ConvertTicksToSecond(e0.time);
             var t1 = track.ConvertTicksToSecond(e1.time);

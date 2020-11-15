@@ -2,17 +2,17 @@
 
 namespace Klak.Timeline.Midi
 {
-    [Serializable]
     public class MidiTrackPlayer
     {
 
         #region Parameters
 
+        public MidiTrackPlayer(MidiTrack track)
+        {
+            this.track = track;
+        }
         public MidiTrack track;
-        float tempo => track.tempo;
-        public uint duration => track.duration;
-        uint ticksPerQuarterNote => track.ticksPerQuarterNote;
-        NoteEvent[] events => track.events;
+        uint duration => track.duration;
         public float previousTime { get; set; }
 
         #endregion
@@ -21,7 +21,7 @@ namespace Klak.Timeline.Midi
         #region MIDI signal emission
 
         public void TriggerSignals
-            (float previous, float current, Action<NoteEvent> onPushEvent)
+            (float previous, float current, Action<MTrkEvent> onPushEvent)
         {
             var t0 = track.ConvertSecondToTicks(previous);
             var t1 = track.ConvertSecondToTicks(current);
@@ -47,15 +47,24 @@ namespace Klak.Timeline.Midi
 
         }
 
-        void TriggerSignalsTick(uint previous, uint current, Action<NoteEvent> onPushEvent)
+        void TriggerSignalsTick(uint previous, uint current, Action<MTrkEvent> onPushEvent)
         {
-            foreach (var e in events)
+            foreach (var e in track.events)
             {
                 if (e.time >= current) break;
                 if (e.time < previous) continue;
-                if (!e.IsNote) continue;
+                // if (!e.IsNote) continue;
                 onPushEvent(e);
             }
+        }
+
+        int headIndex = 0;
+        float lastTime = 0f;
+        void Play(float currentTime)
+        {
+            var deltaTime = currentTime - lastTime;
+            var deltaTick = (uint)(deltaTime * track.tempo / 60 * track.ticksPerQuarterNote);
+            // track.events[headIndex].time;
         }
 
         #endregion
