@@ -58,14 +58,17 @@ namespace Klak.Timeline.Midi
             }
         }
 
-        int headIndex = 0;
-        float lastTime = 0f;
-        void Play(float currentTime)
-        {
-            var deltaTime = currentTime - lastTime;
-            var deltaTick = (uint)(deltaTime * track.tempo / 60 * track.ticksPerQuarterNote);
-            // track.events[headIndex].time;
-        }
+        // int headIndex = 0;
+        // float lastTime = 0f;
+        // void Play(float currentTime, Action<MTrkEvent> onPushEvent)
+        // {
+        //     var deltaTime = currentTime - lastTime;
+        //     var deltaTick = (uint)(deltaTime * track.tempo / 60 * track.ticksPerQuarterNote);
+        //     while (track.events[headIndex].ticks <= deltaTick)
+        //     {
+
+        //     }
+        // }
 
         #endregion
     }

@@ -16,8 +16,9 @@ namespace Klak.Timeline.Midi
         public float tempo = 120;
         public uint duration;
         public uint ticksPerQuarterNote = 96;
-        public MidiEvent[] midiEvents;
-        public LyricEvent[] lyricEvents;
+        public int eventCount;
+        public MTrkEventHolder<MidiEvent>[] midiEvents;
+        public MTrkEventHolder<MTrkEvent>[] ignoreEvents;
 
         MidiTrack _track;
         MidiTrack track
@@ -33,10 +34,23 @@ namespace Klak.Timeline.Midi
                     tempo = tempo,
                     duration = duration,
                     ticksPerQuarterNote = ticksPerQuarterNote,
-                    events = midiEvents.Cast<MTrkEvent>().ToList(),
+                    events = Translate(),
                     // events = lyricEvents.Cast<MTrkEvent>().ToList(),
                 };
             }
+        }
+
+        List<MTrkEvent> Translate()
+        {
+            var list = new List<MTrkEvent>();
+            for (var i = 0; i < eventCount; i++)
+            {
+                MTrkEvent e = null;
+                e = e ?? midiEvents.FirstOrDefault(x => x.index == i)?.Event;
+                e = e ?? ignoreEvents.FirstOrDefault(x => x.index == i).Event;
+                list.Add(e);
+            }
+            return list;
         }
 
         MidiTrackPlayer _player;
