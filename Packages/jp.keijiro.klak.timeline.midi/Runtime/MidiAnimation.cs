@@ -87,12 +87,12 @@ namespace Klak.Timeline.Midi
 
         #region PlayableBehaviour implementation
 
-        float previousTime
-        { get => player.previousTime; set => player.previousTime = value; }
+        float previousTime;
 
         public override void OnGraphStart(Playable playable)
         {
-            player.ResetHead((float)playable.GetTime());
+            previousTime = (float)playable.GetTime();
+            player.ResetHead(previousTime);
         }
 
         public override void OnBehaviourPause(Playable playable, FrameData info)
@@ -107,8 +107,30 @@ namespace Klak.Timeline.Midi
         public override void PrepareFrame(Playable playable, FrameData info)
         {
             var pushAction = GetPushAction(playable, info);
+            var currentTime = (float)playable.GetTime();
             if (info.evaluationType == FrameData.EvaluationType.Playback)
-                player.Play((float)playable.GetTime(), pushAction);
+                player.Play(currentTime, pushAction);
+            else
+            {
+                // // Maximum allowable time difference for scrubbing
+                // const float maxDiff = 0.1f;
+
+                // // If the time is increasing and the difference is smaller
+                // // than maxDiff, it's being scrubbed.
+                // if (currentTime - previousTime < maxDiff)
+                // {
+                //     // Trigger the signals as usual.
+                //     player.Play(currentTime, pushAction);
+                // }
+                // else
+                // {
+                //     // It's jumping not scrubbed, so trigger signals laying
+                //     // around the current frame.
+                //     // var t0 = Mathf.Max(0, current - maxDiff);
+                //     // TriggerSignals(t0, current, pushAction);
+                // }
+            }
+            previousTime = currentTime;
 
             // // Playback or scrubbing?
             // if (info.evaluationType == FrameData.EvaluationType.Playback)

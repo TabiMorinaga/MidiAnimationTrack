@@ -12,7 +12,6 @@ namespace Klak.Timeline.Midi
             this.track = track;
         }
         public MidiTrack track;
-        public float previousTime { get; set; }
 
         #endregion
 
