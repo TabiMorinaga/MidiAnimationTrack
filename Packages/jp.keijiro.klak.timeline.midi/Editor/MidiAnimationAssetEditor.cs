@@ -27,8 +27,9 @@ namespace Klak.Timeline.Midi
             var note = new HashSet<int>();
             var cc = new HashSet<int>();
 
-            foreach (var midiEvent in asset.midiEvents)
+            foreach (var holder in asset.midiEvents)
             {
+                var midiEvent = holder.Event;
                 switch (midiEvent.status & 0xf0u)
                 {
                     case 0x80u:

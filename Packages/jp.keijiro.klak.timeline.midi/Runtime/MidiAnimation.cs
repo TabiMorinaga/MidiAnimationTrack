@@ -16,8 +16,9 @@ namespace Klak.Timeline.Midi
         public float tempo = 120;
         public uint duration;
         public uint ticksPerQuarterNote = 96;
-        public MidiEvent[] midiEvents;
-        public LyricEvent[] lyricEvents;
+        public int eventCount;
+        public MTrkEventHolder<MidiEvent>[] midiEvents;
+        public MTrkEventHolder<MTrkEvent>[] ignoreEvents;
 
         MidiTrack _track;
         MidiTrack track
@@ -33,10 +34,23 @@ namespace Klak.Timeline.Midi
                     tempo = tempo,
                     duration = duration,
                     ticksPerQuarterNote = ticksPerQuarterNote,
-                    events = midiEvents.Cast<MTrkEvent>().ToList(),
+                    events = Translate(),
                     // events = lyricEvents.Cast<MTrkEvent>().ToList(),
                 };
             }
+        }
+
+        List<MTrkEvent> Translate()
+        {
+            var list = new List<MTrkEvent>();
+            for (var i = 0; i < eventCount; i++)
+            {
+                MTrkEvent e = null;
+                e = e ?? midiEvents.FirstOrDefault(x => x.index == i)?.Event;
+                e = e ?? ignoreEvents.FirstOrDefault(x => x.index == i).Event;
+                list.Add(e);
+            }
+            return list;
         }
 
         MidiTrackPlayer _player;
@@ -73,12 +87,12 @@ namespace Klak.Timeline.Midi
 
         #region PlayableBehaviour implementation
 
-        float previousTime
-        { get => player.previousTime; set => player.previousTime = value; }
+        float previousTime;
 
         public override void OnGraphStart(Playable playable)
         {
             previousTime = (float)playable.GetTime();
+            player.ResetHead(previousTime);
         }
 
         public override void OnBehaviourPause(Playable playable, FrameData info)
@@ -86,44 +100,66 @@ namespace Klak.Timeline.Midi
             // When the playable is being finished, signals laying in the rest
             // of the clip should be all triggered.
             if (!playable.IsDone()) return;
-            var duration = (float)playable.GetDuration();
             var pushAction = GetPushAction(playable, info);
-            TriggerSignals(previousTime, duration, pushAction);
+            player.Play((float)playable.GetDuration(), pushAction);
         }
 
         public override void PrepareFrame(Playable playable, FrameData info)
         {
-            var current = (float)playable.GetTime();
             var pushAction = GetPushAction(playable, info);
-
-            // Playback or scrubbing?
+            var currentTime = (float)playable.GetTime();
             if (info.evaluationType == FrameData.EvaluationType.Playback)
-            {
-                // Trigger signals between the prrevious/current time.
-                TriggerSignals(previousTime, current, pushAction);
-            }
+                player.Play(currentTime, pushAction);
             else
             {
-                // Maximum allowable time difference for scrubbing
-                const float maxDiff = 0.1f;
+                // // Maximum allowable time difference for scrubbing
+                // const float maxDiff = 0.1f;
 
-                // If the time is increasing and the difference is smaller
-                // than maxDiff, it's being scrubbed.
-                if (current - previousTime < maxDiff)
-                {
-                    // Trigger the signals as usual.
-                    TriggerSignals(previousTime, current, pushAction);
-                }
-                else
-                {
-                    // It's jumping not scrubbed, so trigger signals laying
-                    // around the current frame.
-                    var t0 = Mathf.Max(0, current - maxDiff);
-                    TriggerSignals(t0, current, pushAction);
-                }
+                // // If the time is increasing and the difference is smaller
+                // // than maxDiff, it's being scrubbed.
+                // if (currentTime - previousTime < maxDiff)
+                // {
+                //     // Trigger the signals as usual.
+                //     player.Play(currentTime, pushAction);
+                // }
+                // else
+                // {
+                //     // It's jumping not scrubbed, so trigger signals laying
+                //     // around the current frame.
+                //     // var t0 = Mathf.Max(0, current - maxDiff);
+                //     // TriggerSignals(t0, current, pushAction);
+                // }
             }
+            previousTime = currentTime;
 
-            previousTime = current;
+            // // Playback or scrubbing?
+            // if (info.evaluationType == FrameData.EvaluationType.Playback)
+            // {
+            //     // Trigger signals between the prrevious/current time.
+            //     TriggerSignals(previousTime, current, pushAction);
+            // }
+            // else
+            // {
+            //     // Maximum allowable time difference for scrubbing
+            //     const float maxDiff = 0.1f;
+
+            //     // If the time is increasing and the difference is smaller
+            //     // than maxDiff, it's being scrubbed.
+            //     if (current - previousTime < maxDiff)
+            //     {
+            //         // Trigger the signals as usual.
+            //         TriggerSignals(previousTime, current, pushAction);
+            //     }
+            //     else
+            //     {
+            //         // It's jumping not scrubbed, so trigger signals laying
+            //         // around the current frame.
+            //         var t0 = Mathf.Max(0, current - maxDiff);
+            //         TriggerSignals(t0, current, pushAction);
+            //     }
+            // }
+
+            // previousTime = current;
         }
 
         #endregion
@@ -138,15 +174,9 @@ namespace Klak.Timeline.Midi
                 info.output.PushNotification(playable, _signalPool.Allocate(e));
         }
 
-        void TriggerSignals(float previous, float current, Action<MTrkEvent> onPushEvent)
-        {
-            _signalPool.ResetFrame();
-            player.TriggerSignals(previous, current, onPushEvent);
-        }
-
         #endregion
 
-        // #region Private variables and methods
+        #region Private variables and methods
 
         (int i0, int i1) GetCCEventIndexAroundTick(uint tick, int ccNumber)
         {
@@ -178,7 +208,7 @@ namespace Klak.Timeline.Midi
             }
             return (iOn, iOff);
         }
-        // #endregion
+        #endregion
 
         #region Envelope generator
 

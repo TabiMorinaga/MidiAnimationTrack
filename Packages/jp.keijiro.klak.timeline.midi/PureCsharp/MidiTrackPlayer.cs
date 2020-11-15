@@ -12,59 +12,39 @@ namespace Klak.Timeline.Midi
             this.track = track;
         }
         public MidiTrack track;
-        uint duration => track.duration;
-        public float previousTime { get; set; }
 
         #endregion
 
 
         #region MIDI signal emission
 
-        public void TriggerSignals
-            (float previous, float current, Action<MTrkEvent> onPushEvent)
-        {
-            var t0 = track.ConvertSecondToTicks(previous);
-            var t1 = track.ConvertSecondToTicks(current);
-
-            // Resolve wrapping-around cases by offsetting.
-            if (t1 < t0) t1 += (t0 / duration + 1) * duration;
-
-            // Offset both the points to make t0 < duration.
-            var offs = (t0 / duration) * duration;
-            t0 -= offs;
-            t1 -= offs;
-
-            // Resolve loops.
-            for (; t1 >= duration; t1 -= duration)
-            {
-                // Trigger signals between t0 and the end of the clip.
-                TriggerSignalsTick(t0, 0xffffffffu, onPushEvent);
-                t0 = 0;
-            }
-
-            // Trigger signals between t0 and t1.
-            TriggerSignalsTick(t0, t1, onPushEvent);
-
-        }
-
-        void TriggerSignalsTick(uint previous, uint current, Action<MTrkEvent> onPushEvent)
-        {
-            foreach (var e in track.events)
-            {
-                if (e.time >= current) break;
-                if (e.time < previous) continue;
-                // if (!e.IsNote) continue;
-                onPushEvent(e);
-            }
-        }
-
         int headIndex = 0;
-        float lastTime = 0f;
-        void Play(float currentTime)
+        uint lastTick = 0;
+        public void ResetHead(float time, bool loop = true)
         {
-            var deltaTime = currentTime - lastTime;
-            var deltaTick = (uint)(deltaTime * track.tempo / 60 * track.ticksPerQuarterNote);
-            // track.events[headIndex].time;
+            var targetTick = (uint)(time * track.tempo / 60 * track.ticksPerQuarterNote);
+            lastTick = 0u;
+            while (targetTick - lastTick > track.events[headIndex].ticks)
+            {
+                lastTick += track.events[headIndex].ticks;
+                headIndex++;
+                if (loop && headIndex == track.events.Count)
+                    headIndex = 0;
+            }
+        }
+        public void Play(float currentTime, Action<MTrkEvent> onPushEvent, bool loop = true)
+        {
+            var currentTick = (uint)(currentTime * track.tempo / 60 * track.ticksPerQuarterNote);
+            var deltatick = currentTick - lastTick;
+            while (track.events[headIndex].ticks <= deltatick)
+            {
+                lastTick += track.events[headIndex].ticks;
+                deltatick -= track.events[headIndex].ticks;
+                onPushEvent(track.events[headIndex]);
+                headIndex++;
+                if (loop && headIndex == track.events.Count)
+                    headIndex = 0;
+            }
         }
 
         #endregion

@@ -70,15 +70,18 @@ namespace Klak.Timeline.Midi
                 if ((reader.PeekByte() & 0x80u) != 0)
                     stat = reader.ReadByte();
 
-                if (stat == 0xffu)
-                    events.Add(ReadMetaEvent(allTicks, ticks, stat, reader));
-                else if (stat == 0xf0u)
+                switch (stat)
                 {
-                    // 0xf0: SysEx (unused)
-                    while (reader.ReadByte() != 0xf7u) { }
+                    case 0xff:
+                        events.Add(ReadMetaEvent(allTicks, ticks, stat, reader));
+                        break;
+                    case 0xf0:
+                        events.Add(ReadSysExEvent(allTicks, ticks, stat, reader));
+                        break;
+                    default:
+                        events.Add(ReadMidiEvent(allTicks, ticks, stat, reader));
+                        break;
                 }
-                else
-                    events.Add(ReadMidiEvent(allTicks, ticks, stat, reader));
             }
 
             // Quantize duration with bars.
@@ -151,12 +154,26 @@ namespace Klak.Timeline.Midi
                     {
                         time = allTicks,
                         ticks = ticks,
-                        length = length,
                         bytes = bytes,
                     };
             }
         }
-
+        static MTrkEvent ReadSysExEvent(uint allTicks, uint ticks, byte stat, MidiDataStreamReader reader)
+        {
+            var bytes = new List<byte>();
+            while (true)
+            {
+                var data = reader.ReadByte();
+                bytes.Add(data);
+                if (data == 0xf7u)
+                    return new UnknownEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        bytes = bytes.ToArray(),
+                    };
+            }
+        }
         static MidiEvent ReadMidiEvent(uint allTicks, uint ticks, byte stat, MidiDataStreamReader reader)
         {
             var b1 = reader.ReadByte();

@@ -16,22 +16,28 @@ namespace Klak.Timeline.Midi
                 anim.template.tempo = track.tempo;
                 anim.template.duration = track.duration;
                 anim.template.ticksPerQuarterNote = track.ticksPerQuarterNote;
-                var midiEvents = new List<MidiEvent>();
-                var lyricEvents = new List<LyricEvent>();
-                foreach (var e in track.events)
+                var midiEvents = new List<MTrkEventHolder<MidiEvent>>();
+                var ignoreEvents = new List<MTrkEventHolder<MTrkEvent>>();
+                // var lyricEvents = new List<LyricEvent>();
+                for (var i = 0; i < track.events.Count; i++)
                 {
-                    switch (e)
+                    switch (track.events[i])
                     {
                         case MidiEvent midiEvent:
-                            midiEvents.Add(midiEvent);
+                            midiEvents.Add(new MTrkEventHolder<MidiEvent>(i, midiEvent));
                             break;
-                        case LyricEvent lyricEvent:
-                            lyricEvents.Add(lyricEvent);
+                        // case LyricEvent lyricEvent:
+                        //     lyricEvents.Add(lyricEvent);
+                        //     break;
+                        default:
+                            ignoreEvents.Add(new MTrkEventHolder<MTrkEvent>(i, track.events[i]));
                             break;
                     }
                 }
+                anim.template.eventCount = track.events.Count;
                 anim.template.midiEvents = midiEvents.ToArray();
-                anim.template.lyricEvents = lyricEvents.ToArray();
+                // anim.template.lyricEvents = lyricEvents.ToArray();
+                anim.template.ignoreEvents = ignoreEvents.ToArray();
                 return anim;
             }).ToArray();
             // Asset instantiation
