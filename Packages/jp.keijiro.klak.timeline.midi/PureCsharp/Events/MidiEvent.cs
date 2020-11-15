@@ -2,7 +2,7 @@
 {
     // MIDI note event raw data struct
     [System.Serializable]
-    public class MidiEvent : MTrkEvent
+    public sealed class MidiEvent : MTrkEvent
     {
         public byte status;
         public byte data1;

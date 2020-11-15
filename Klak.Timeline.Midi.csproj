@@ -48,6 +48,7 @@
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\Runtime\MidiAnimation.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\Runtime\MidiAnimationMixer.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\Runtime\MidiSignalReceiver.cs" />
+     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\Runtime\MTrkEventHolder.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>
