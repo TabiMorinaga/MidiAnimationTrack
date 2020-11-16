@@ -134,7 +134,7 @@ namespace Klak.Timeline.Midi
                     {
                         time = allTicks,
                         ticks = ticks,
-                        text = text,
+                        lyric = text,
                     };
                 // Tempo
                 case 0x51:

@@ -1,9 +1,9 @@
 ﻿namespace Klak.Timeline.Midi
 {
     [System.Serializable]
-    public sealed class LyricEvent : MTrkEvent
+    public sealed class CopyrightEvent : MTrkEvent
     {
-        public const byte status = 0x05;
+        public const byte status = 0x02;
         public string text;
     }
 }
