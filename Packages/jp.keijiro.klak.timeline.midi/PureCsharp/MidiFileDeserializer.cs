@@ -18,17 +18,17 @@ namespace Klak.Timeline.Midi
                 throw new FormatException("Can't find header chunk.");
 
             // Chunk length
-            if (reader.ReadBEUInt32() != 6u)
+            if (reader.ReadBEUInt(4) != 6u)
                 throw new FormatException("Length of header chunk must be 6.");
 
             // Format (unused)
             reader.Advance(2);
 
             // Number of tracks
-            var trackCount = reader.ReadBEUInt16();
+            var trackCount = reader.ReadBEUInt(2);
 
             // Ticks per quarter note
-            var tpqn = reader.ReadBEUInt16();
+            var tpqn = reader.ReadBEUInt(2);
             if ((tpqn & 0x8000u) != 0)
                 throw new FormatException("SMPTE time code is not supported.");
 
@@ -52,7 +52,7 @@ namespace Klak.Timeline.Midi
                 throw new FormatException("Can't find track chunk.");
 
             // Chunk length
-            var chunkEnd = reader.ReadBEUInt32();
+            var chunkEnd = reader.ReadBEUInt(4);
             chunkEnd += reader.Position;
 
             // MIDI event sequence
@@ -73,7 +73,7 @@ namespace Klak.Timeline.Midi
                 switch (stat)
                 {
                     case 0xff:
-                        events.Add(ReadMetaEvent(allTicks, ticks, stat, reader));
+                        events.Add(ReadMetaEvent(allTicks, ticks, reader));
                         break;
                     case 0xf0:
                         events.Add(ReadSysExEvent(allTicks, ticks, stat, reader));
@@ -113,48 +113,142 @@ namespace Klak.Timeline.Midi
 
         #endregion
 
-        static MTrkEvent ReadMetaEvent(uint allTicks, uint ticks, byte stat, MidiDataStreamReader reader)
+        static MTrkEvent ReadMetaEvent(uint allTicks, uint ticks, MidiDataStreamReader reader)
         {
             var eventType = reader.ReadByte();
+            var length = reader.ReadMultiByteValue();
             switch (eventType)
             {
-                // Track Name
-                case 0x03:
-                    var name = reader.ReadText();
+                // 00
+                case SequenceNumberEvent.status:
+                    return new SequenceNumberEvent
+                    {
+                        ticks = ticks,
+                        time = allTicks,
+                        number = reader.ReadBytes(length),
+                    };
+                // 01
+                case TextEvent.status:
+                    return new TextEvent
+                    {
+                        ticks = ticks,
+                        time = allTicks,
+                        text = reader.ReadChars(length),
+                    };
+                // 02
+                case CopyrightEvent.status:
+                    return new CopyrightEvent
+                    {
+                        ticks = ticks,
+                        time = allTicks,
+                        text = reader.ReadChars(length),
+                    };
+                // 03
+                case TrackNameEvent.status:
                     return new TrackNameEvent
                     {
                         time = allTicks,
                         ticks = ticks,
-                        name = name,
+                        name = reader.ReadChars(length),
                     };
-                // Lyric
-                case 0x05:
-                    var text = reader.ReadText();
+                // 04
+                case InstrumentNameEvent.status:
+                    return new InstrumentNameEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        name = reader.ReadChars(length),
+                    };
+                // 05
+                case LyricEvent.status:
                     return new LyricEvent
                     {
                         time = allTicks,
                         ticks = ticks,
-                        lyric = text,
+                        lyric = reader.ReadChars(length),
                     };
-                // Tempo
-                case 0x51:
-                    var len = reader.ReadByte();
-                    var tickTempo = reader.ReadBEUint(len);
+                // 06
+                case MarkerEvent.status:
+                    return new MarkerEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        text = reader.ReadChars(length),
+                    };
+                // 07
+                case QueueEvent.status:
+                    return new QueueEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        text = reader.ReadChars(length),
+                    };
+                // 20
+                case ChannelPrefixEvent.status:
+                    return new ChannelPrefixEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        data = reader.ReadByte(),
+                    };
+                // 2f
+                case EndPointEvent.status:
+                    return new EndPointEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                    };
+                // 51
+                case TempoEvent.status:
+                    var tickTempo = reader.ReadBEUInt((byte)length);
                     return new TempoEvent
                     {
                         time = allTicks,
                         ticks = ticks,
                         tickTempo = tickTempo,
                     };
+                // 54
+                case SmpteOffsetEvent.status:
+                    return new SmpteOffsetEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        data = reader.ReadBytes(length),
+                    };
+                // 58
+                case BeatEvent.status:
+                    return new BeatEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        data = reader.ReadBytes(length),
+                    };
+                // 59
+                case KeyEvent.status:
+                    var sf = reader.ReadByte();
+                    var mi = reader.ReadByte();
+                    return new KeyEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        sf = sf,
+                        isMajor = mi == 1,
+                    };
+                // 7f
+                case SequencerUniqueEvent.status:
+                    return new SequencerUniqueEvent
+                    {
+                        time = allTicks,
+                        ticks = ticks,
+                        data = reader.ReadBytes(length),
+                    };
                 // Ignore
                 default:
-                    var length = reader.ReadMultiByteValue();
-                    var bytes = reader.ReadBytes(length);
                     return new UnknownEvent
                     {
                         time = allTicks,
                         ticks = ticks,
-                        bytes = bytes,
+                        bytes = reader.ReadBytes(length),
                     };
             }
         }

@@ -51,7 +51,7 @@ namespace Klak.Timeline.Midi
             return bytes;
         }
 
-        public string ReadChars(int length, int codepage = 932)
+        public string ReadChars(uint length, int codepage = 932)
         {
             var bytesData = new byte[length];
             for (var i = 0; i < length; i++)
@@ -59,7 +59,7 @@ namespace Klak.Timeline.Midi
             return System.Text.Encoding.GetEncoding(codepage).GetString(bytesData);
         }
 
-        public uint ReadBEUint(byte length)
+        public uint ReadBEUInt(byte length)
         {
             var number = 0u;
             for (byte i = 0; i < length; i++)
@@ -67,16 +67,6 @@ namespace Klak.Timeline.Midi
                 number += (uint)ReadByte() << (length - i - 1) * 8;
             }
             return number;
-        }
-
-        public uint ReadBEUInt32()
-        {
-            return ReadBEUint(4);
-        }
-
-        public uint ReadBEUInt16()
-        {
-            return ReadBEUint(2);
         }
 
         public uint ReadMultiByteValue()
@@ -90,12 +80,6 @@ namespace Klak.Timeline.Midi
                 v <<= 7;
             }
             return v;
-        }
-
-        public string ReadText()
-        {
-            var length = ReadByte();
-            return ReadChars(length);
         }
 
         #endregion

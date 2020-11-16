@@ -4,6 +4,6 @@
     public sealed class SmpteOffsetEvent : MTrkEvent
     {
         public const byte status = 0x54;
-        byte[] data = new byte[5];
+        public byte[] data = new byte[5];
     }
 }
