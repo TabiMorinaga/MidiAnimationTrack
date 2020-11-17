@@ -110,56 +110,7 @@ namespace Klak.Timeline.Midi
             var currentTime = (float)playable.GetTime();
             if (info.evaluationType == FrameData.EvaluationType.Playback)
                 player.Play(currentTime, pushAction);
-            else
-            {
-                // // Maximum allowable time difference for scrubbing
-                // const float maxDiff = 0.1f;
-
-                // // If the time is increasing and the difference is smaller
-                // // than maxDiff, it's being scrubbed.
-                // if (currentTime - previousTime < maxDiff)
-                // {
-                //     // Trigger the signals as usual.
-                //     player.Play(currentTime, pushAction);
-                // }
-                // else
-                // {
-                //     // It's jumping not scrubbed, so trigger signals laying
-                //     // around the current frame.
-                //     // var t0 = Mathf.Max(0, current - maxDiff);
-                //     // TriggerSignals(t0, current, pushAction);
-                // }
-            }
             previousTime = currentTime;
-
-            // // Playback or scrubbing?
-            // if (info.evaluationType == FrameData.EvaluationType.Playback)
-            // {
-            //     // Trigger signals between the prrevious/current time.
-            //     TriggerSignals(previousTime, current, pushAction);
-            // }
-            // else
-            // {
-            //     // Maximum allowable time difference for scrubbing
-            //     const float maxDiff = 0.1f;
-
-            //     // If the time is increasing and the difference is smaller
-            //     // than maxDiff, it's being scrubbed.
-            //     if (current - previousTime < maxDiff)
-            //     {
-            //         // Trigger the signals as usual.
-            //         TriggerSignals(previousTime, current, pushAction);
-            //     }
-            //     else
-            //     {
-            //         // It's jumping not scrubbed, so trigger signals laying
-            //         // around the current frame.
-            //         var t0 = Mathf.Max(0, current - maxDiff);
-            //         TriggerSignals(t0, current, pushAction);
-            //     }
-            // }
-
-            // previousTime = current;
         }
 
         #endregion
