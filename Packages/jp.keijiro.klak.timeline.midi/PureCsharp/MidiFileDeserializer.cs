@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 
 namespace Klak.Timeline.Midi
@@ -58,7 +57,7 @@ namespace Klak.Timeline.Midi
             // MIDI event sequence
             var events = new List<MTrkEvent>();
             var allTicks = 0u;
-            var stat = (byte)0;
+            byte stat = 0;
 
             while (reader.Position < chunkEnd)
             {
