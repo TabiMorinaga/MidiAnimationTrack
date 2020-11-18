@@ -36,28 +36,28 @@
     <ImplicitlyExpandDesignTimeFacades>false</ImplicitlyExpandDesignTimeFacades>
   </PropertyGroup>
   <ItemGroup>
+     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\KeyEvent.cs" />
+     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\SmpteOffsetEvent.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\TrackNameEvent.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\MidiDataStreamReader.cs" />
+     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\InstrumentNameEvent.cs" />
+     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\SequenceNumberEvent.cs" />
+     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\MarkerEvent.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MTrkEvent.cs" />
+     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\QueueEvent.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\UnknownEvent.cs" />
+     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\SequencerUniqueEvent.cs" />
+     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\CopyrightEvent.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\MidiTrackPlayer.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\MidiFileDeserializer.cs" />
+     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\BeatEvent.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\TempoEvent.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MidiEvent.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\LyricEvent.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\MidiTrack.cs" />
-     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\SequenceNumberEvent.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\TextEvent.cs" />
-     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\CopyrightEvent.cs" />
-     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\InstrumentNameEvent.cs" />
-     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\QueueEvent.cs" />
-     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\EndPointEvent.cs" />
-     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\KeyEvent.cs" />
-     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\BeatEvent.cs" />
-     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\MarkerEvent.cs" />
      <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\ChannelPrefixEvent.cs" />
-     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\SmpteOffsetEvent.cs" />
-     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\SequencerUniqueEvent.cs" />
+     <Compile Include="Packages\jp.keijiro.klak.timeline.midi\PureCsharp\Events\MetaEvents\EndPointEvent.cs" />
     <Reference Include="UnityEngine">
         <HintPath>C:/Program Files/Unity/Hub/Editor/2020.1.13f1/Editor/Data/Managed/UnityEngine/UnityEngine.dll</HintPath>
     </Reference>

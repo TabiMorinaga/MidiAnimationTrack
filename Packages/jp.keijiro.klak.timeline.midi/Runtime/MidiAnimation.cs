@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
@@ -18,7 +17,12 @@ namespace Klak.Timeline.Midi
         public uint ticksPerQuarterNote = 96;
         public int eventCount;
         public MTrkEventHolder<MidiEvent>[] midiEvents;
-        public MTrkEventHolder<MTrkEvent>[] ignoreEvents;
+        public MTrkEventHolder<TextEvent>[] textEvents;
+        public MTrkEventHolder<LyricEvent>[] lyricEvents;
+        public MTrkEventHolder<MarkerEvent>[] markerEvents;
+        public MTrkEventHolder<QueueEvent>[] queueEvents;
+        public MTrkEventHolder<BeatEvent>[] beatEvents;
+        public MTrkEventHolder<KeyEvent>[] keyEvents;
 
         MidiTrack _track;
         MidiTrack track
@@ -35,7 +39,6 @@ namespace Klak.Timeline.Midi
                     duration = duration,
                     ticksPerQuarterNote = ticksPerQuarterNote,
                     events = Translate(),
-                    // events = lyricEvents.Cast<MTrkEvent>().ToList(),
                 };
             }
         }
@@ -43,14 +46,35 @@ namespace Klak.Timeline.Midi
         List<MTrkEvent> Translate()
         {
             var list = new List<MTrkEvent>();
-            for (var i = 0; i < eventCount; i++)
+            var listIndex = 0;
+            var midiIndex = 0;
+            var textIndex = 0;
+            var lyricIndex = 0;
+            var markerIndex = 0;
+            var queueIndex = 0;
+            var beatIndex = 0;
+            var keyIndex = 0;
+            for (; listIndex < eventCount; listIndex++)
             {
-                MTrkEvent e = null;
-                e = e ?? midiEvents.FirstOrDefault(x => x.index == i)?.Event;
-                e = e ?? ignoreEvents.FirstOrDefault(x => x.index == i).Event;
-                list.Add(e);
+                Search(ref midiIndex, midiEvents);
+                Search(ref textIndex, textEvents);
+                Search(ref lyricIndex, lyricEvents);
+                Search(ref markerIndex, markerEvents);
+                Search(ref queueIndex, queueEvents);
+                Search(ref beatIndex, beatEvents);
+                Search(ref keyIndex, keyEvents);
             }
             return list;
+
+            void Search<T>(ref int index, MTrkEventHolder<T>[] events) where T : MTrkEvent
+            {
+                if (events.Length == index) return;
+                if (events[index].index == listIndex)
+                {
+                    list.Add((events[index].Event));
+                    index++;
+                }
+            }
         }
 
         MidiTrackPlayer _player;

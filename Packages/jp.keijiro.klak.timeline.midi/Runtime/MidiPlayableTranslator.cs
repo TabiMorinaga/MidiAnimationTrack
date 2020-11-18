@@ -16,29 +16,61 @@ namespace Klak.Timeline.Midi
                 anim.template.tempo = track.tempo;
                 anim.template.duration = track.duration;
                 anim.template.ticksPerQuarterNote = track.ticksPerQuarterNote;
+
+
+                var offset = 0u;
+                var index = 0;
+
                 var midiEvents = new List<MTrkEventHolder<MidiEvent>>();
-                var ignoreEvents = new List<MTrkEventHolder<MTrkEvent>>();
-                // var lyricEvents = new List<LyricEvent>();
+                var textEvents = new List<MTrkEventHolder<TextEvent>>();
+                var lyricEvents = new List<MTrkEventHolder<LyricEvent>>();
+                var markerEvents = new List<MTrkEventHolder<MarkerEvent>>();
+                var queueEvents = new List<MTrkEventHolder<QueueEvent>>();
+                var beatEvents = new List<MTrkEventHolder<BeatEvent>>();
+                var keyEvents = new List<MTrkEventHolder<KeyEvent>>();
                 for (var i = 0; i < track.events.Count; i++)
                 {
                     switch (track.events[i])
                     {
                         case MidiEvent midiEvent:
-                            midiEvents.Add(new MTrkEventHolder<MidiEvent>(i, midiEvent));
+                            AddList(midiEvent, midiEvents);
                             break;
-                        // case LyricEvent lyricEvent:
-                        //     lyricEvents.Add(lyricEvent);
-                        //     break;
+                        case TextEvent textEvent:
+                            AddList(textEvent, textEvents);
+                            break;
+                        case LyricEvent lyricEvent:
+                            AddList(lyricEvent, lyricEvents);
+                            break;
+                        case MarkerEvent markerEvent:
+                            AddList(markerEvent, markerEvents);
+                            break;
+                        case QueueEvent queueEvent:
+                            AddList(queueEvent, queueEvents);
+                            break;
+                        case BeatEvent beatEvent:
+                            AddList(beatEvent, beatEvents);
+                            break;
+                        case KeyEvent keyEvent:
+                            AddList(keyEvent, keyEvents);
+                            break;
                         default:
-                            ignoreEvents.Add(new MTrkEventHolder<MTrkEvent>(i, track.events[i]));
+                            offset += track.events[i].ticks;
                             break;
                     }
                 }
-                anim.template.eventCount = track.events.Count;
+                anim.template.eventCount = index;
                 anim.template.midiEvents = midiEvents.ToArray();
-                // anim.template.lyricEvents = lyricEvents.ToArray();
-                anim.template.ignoreEvents = ignoreEvents.ToArray();
+                anim.template.lyricEvents = lyricEvents.ToArray();
                 return anim;
+
+                void AddList<T>(T mEvent, List<MTrkEventHolder<T>> list) where T : MTrkEvent
+                {
+                    mEvent.ticks += offset;
+                    mEvent.time += offset;
+                    list.Add(new MTrkEventHolder<T>(index, mEvent));
+                    offset = 0u;
+                    index++;
+                }
             }).ToArray();
             // Asset instantiation
             var asset = ScriptableObject.CreateInstance<MidiFileAsset>();
