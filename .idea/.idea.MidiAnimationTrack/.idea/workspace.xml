@@ -2,76 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="7c22a740-e22f-4d03-952e-bcc1a8353fad" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.MidiAnimationTrack/.idea/contentModel.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.MidiAnimationTrack/.idea/indexLayout.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.MidiAnimationTrack/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.MidiAnimationTrack/.idea/projectSettingsUpdater.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.MidiAnimationTrack/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/.idea.MidiAnimationTrack/riderModule.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MidiAnimationTrack/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MidiAnimationTrack/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MidiAnimationTrack.sln" beforeDir="false" afterPath="$PROJECT_DIR$/MidiAnimationTrack.sln" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/CoreEditorUtils.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/CoreEditorUtils.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiAnimationAssetEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiAnimationAssetEditor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiAnimationTrackEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiAnimationTrackEditor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiControlDrawer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiControlDrawer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiEditorUtility.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiEditorUtility.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiEnvelopeDrawer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiEnvelopeDrawer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiFileAssetImporter.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiFileAssetImporter.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiNoteFilterDrawer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiNoteFilterDrawer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiSignalReceiverEditor.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiSignalReceiverEditor.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/Internal.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/Internal/ControlAction.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/Internal/ControlAction.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/Internal/IPropertyCollectorExtension.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/Internal/IPropertyCollectorExtension.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/Internal/MidiSignalPool.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/Internal/MidiSignalPool.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MTrkEventHolder.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MTrkEventHolder.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiAnimation.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiAnimation.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiAnimationAsset.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiAnimationAsset.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiAnimationMixer.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiAnimationMixer.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiAnimationTrack.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiAnimationTrack.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiControl.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiControl.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiFileAsset.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiFileAsset.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiPlayableTranslator.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiPlayableTranslator.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiSignal.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiSignal.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiSignalReceiver.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/MidiSignalReceiver.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/goma_recorder.Midity.Playable.Runtime.asmdef" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Runtime/goma_recorder.Midity.Playable.Runtime.asmdef.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MTrkEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MTrkEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/BeatEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/BeatEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/ChannelPrefixEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/ChannelPrefixEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/CopyrightEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/CopyrightEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/EndPointEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/EndPointEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/InstrumentNameEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/InstrumentNameEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/KeyEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/KeyEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/LyricEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/LyricEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/MarkerEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/MarkerEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/QueueEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/QueueEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/SequenceNumberEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/SequenceNumberEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/SequencerUniqueEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/SequencerUniqueEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/SmpteOffsetEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/SmpteOffsetEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/TempoEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/TempoEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/TextEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/TextEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/TrackNameEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MetaEvents/TrackNameEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MidiEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/MidiEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/UnknownEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/Events/UnknownEvent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/MidiDataStreamReader.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/MidiDataStreamReader.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/MidiFileDeserializer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/MidiFileDeserializer.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/MidiTrack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/MidiTrack.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/MidiTrackPlayer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/MidiTrackPlayer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -88,6 +21,7 @@
         <option value="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity/Runtime/MidiDataStreamReader.cs" />
         <option value="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiAnimationAssetEditor.cs" />
         <option value="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiAnimationTrackEditor.cs" />
+        <option value="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/package.json" />
       </list>
     </option>
   </component>
@@ -137,7 +71,7 @@
       <option name="presentableId" value="Default" />
       <updated>1605940129179</updated>
       <workItem from="1605940145182" duration="1629000" />
-      <workItem from="1605962167394" duration="1373000" />
+      <workItem from="1605962167394" duration="2305000" />
     </task>
     <servers />
   </component>
@@ -148,5 +82,11 @@
   <component name="UnityUnitTestConfiguration" currentTestLauncher="EditMode" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="271" y="92" width="672" height="678" key="search.everywhere.popup" timestamp="1605964470015">
+      <screen x="0" y="0" width="1216" height="771" />
+    </state>
+    <state x="271" y="92" width="672" height="678" key="search.everywhere.popup/0.0.1216.771/179.-1152.2048.1112@0.0.1216.771" timestamp="1605964470015" />
   </component>
 </project>
