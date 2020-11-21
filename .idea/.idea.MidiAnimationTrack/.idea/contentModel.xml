@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\tabik\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\tabik\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_MidiAnimationTrack.1512460395.00" t="ExcludeRecursive" />
+    <e p="C:\Users\tabik\UnityProjects\MidiAnimationTrack" t="IncludeRecursive">
+      <e p="goma_recorder.Midity.Playable.Editor.csproj" t="IncludeRecursive" />
+      <e p="goma_recorder.Midity.Playable.Runtime.csproj" t="IncludeRecursive" />
+      <e p="goma_recorder.Midity.Runtime.csproj" t="IncludeRecursive" />
+      <e p="MidiAnimationTrack.sln" t="IncludeFlat" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive">
+        <e p="jp.keijiro.klak.timeline.midi" t="Include">
+          <e p="Midity" t="Include">
+            <e p="Runtime" t="Include">
+              <e p="Events" t="Include">
+                <e p="MetaEvents" t="Include">
+                  <e p="BeatEvent.cs" t="Include" />
+                  <e p="ChannelPrefixEvent.cs" t="Include" />
+                  <e p="CopyrightEvent.cs" t="Include" />
+                  <e p="EndPointEvent.cs" t="Include" />
+                  <e p="InstrumentNameEvent.cs" t="Include" />
+                  <e p="KeyEvent.cs" t="Include" />
+                  <e p="LyricEvent.cs" t="Include" />
+                  <e p="MarkerEvent.cs" t="Include" />
+                  <e p="QueueEvent.cs" t="Include" />
+                  <e p="SequenceNumberEvent.cs" t="Include" />
+                  <e p="SequencerUniqueEvent.cs" t="Include" />
+                  <e p="SmpteOffsetEvent.cs" t="Include" />
+                  <e p="TempoEvent.cs" t="Include" />
+                  <e p="TextEvent.cs" t="Include" />
+                  <e p="TrackNameEvent.cs" t="Include" />
+                </e>
+                <e p="MidiEvent.cs" t="Include" />
+                <e p="MTrkEvent.cs" t="Include" />
+                <e p="UnknownEvent.cs" t="Include" />
+              </e>
+              <e p="MidiDataStreamReader.cs" t="Include" />
+              <e p="MidiFileDeserializer.cs" t="Include" />
+              <e p="MidiTrack.cs" t="Include" />
+              <e p="MidiTrackPlayer.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Midity.Playable" t="Include">
+            <e p="Editor" t="Include">
+              <e p="CoreEditorUtils.cs" t="Include" />
+              <e p="MidiAnimationAssetEditor.cs" t="Include" />
+              <e p="MidiAnimationTrackEditor.cs" t="Include" />
+              <e p="MidiControlDrawer.cs" t="Include" />
+              <e p="MidiEditorUtility.cs" t="Include" />
+              <e p="MidiEnvelopeDrawer.cs" t="Include" />
+              <e p="MidiFileAssetImporter.cs" t="Include" />
+              <e p="MidiFileAssetImporterEditor.cs" t="Include" />
+              <e p="MidiNoteFilterDrawer.cs" t="Include" />
+              <e p="MidiSignalReceiverEditor.cs" t="Include" />
+            </e>
+            <e p="Runtime" t="Include">
+              <e p="Internal" t="Include">
+                <e p="ControlAction.cs" t="Include" />
+                <e p="IPropertyCollectorExtension.cs" t="Include" />
+                <e p="MidiSignalPool.cs" t="Include" />
+              </e>
+              <e p="MidiAnimation.cs" t="Include" />
+              <e p="MidiAnimationAsset.cs" t="Include" />
+              <e p="MidiAnimationMixer.cs" t="Include" />
+              <e p="MidiAnimationTrack.cs" t="Include" />
+              <e p="MidiControl.cs" t="Include" />
+              <e p="MidiFileAsset.cs" t="Include" />
+              <e p="MidiPlayableTranslator.cs" t="Include" />
+              <e p="MidiSignal.cs" t="Include" />
+              <e p="MidiSignalReceiver.cs" t="Include" />
+              <e p="MTrkEventHolder.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+      </e>
+      <e p="Temp\bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
