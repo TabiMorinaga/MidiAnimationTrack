@@ -34,8 +34,8 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "jp.goma_recorder.midity.playable.": {
-      "version": "file:jp.keijiro.klak.timeline.midi",
+    "jp.goma_recorder.midity.playable": {
+      "version": "file:jp.goma_recorder.midity.playable",
       "depth": 0,
       "source": "embedded",
       "dependencies": {}

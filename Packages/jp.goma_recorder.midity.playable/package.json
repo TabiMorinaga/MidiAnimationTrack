@@ -3,11 +3,12 @@
   "description": "MIDI Animation Track is a custom timeline/playables package that provides functionality to control object properties based on sequence data contained in a standard MIDI file",
   "displayName": "Playable Midi",
   "keywords": [
-    "unity"
+    "unity",
+    "midi"
   ],
-  "license": "Unlicense",
-  "name": "jp.goma_recorder.midity.playable.",
+  "license": "MIT",
+  "name": "jp.goma_recorder.midity.playable",
   "repository": "github:keijiro/MidiAnimationTrack",
   "unity": "2020.1",
-  "version": "1.0.3"
+  "version": "0.0.0"
 }
