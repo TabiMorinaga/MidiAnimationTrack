@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Klak.Timeline.Midi
+namespace Midity
 {
     public class MidiTrackPlayer
     {

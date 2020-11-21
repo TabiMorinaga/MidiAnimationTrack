@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Playables;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable
 {
     // Receives MIDI signals (MIDI event notifications) from a timeline and
     // invokes assigned events.
@@ -21,7 +21,7 @@ namespace Klak.Timeline.Midi
         public Action<MTrkEvent> onFireEvent = null;
 
         public void OnNotify
-            (Playable origin, INotification notification, object context)
+            (UnityEngine.Playables.Playable origin, INotification notification, object context)
         {
             var mtrkEvent = ((MidiSignal)notification).Event;
             if (onFireEvent != null)

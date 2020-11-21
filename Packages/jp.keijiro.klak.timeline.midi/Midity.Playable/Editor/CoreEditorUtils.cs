@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEditor;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable.Editor
 {
     //
     // These CoreEditor classes are simply copy-pasted from the core render

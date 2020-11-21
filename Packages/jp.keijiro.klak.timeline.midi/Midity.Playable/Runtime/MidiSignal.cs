@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable
 {
     // Payload for MIDI event notifications
     public sealed class MidiSignal : INotification

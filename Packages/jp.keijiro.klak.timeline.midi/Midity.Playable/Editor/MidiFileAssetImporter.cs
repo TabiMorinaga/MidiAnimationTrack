@@ -2,7 +2,7 @@ using System.IO;
 using UnityEngine;
 using UnityEditor.Experimental.AssetImporters;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable.Editor
 {
     // Custom importer for .mid files
     [ScriptedImporter(1, "mid")]

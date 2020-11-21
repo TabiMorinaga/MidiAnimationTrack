@@ -1,4 +1,4 @@
-﻿namespace Klak.Timeline.Midi
+﻿namespace Midity.Playable
 {
     [System.Serializable]
     public class MTrkEventHolder<T> where T : MTrkEvent

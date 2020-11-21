@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable
 {
     // Runtime playable class that calculates MIDI based animation
     [System.Serializable]
@@ -95,7 +95,7 @@ namespace Klak.Timeline.Midi
 
         public float DurationInSecond => track.DurationInSecond;
 
-        public float GetValue(Playable playable, MidiControl control)
+        public float GetValue(UnityEngine.Playables.Playable playable, MidiControl control)
         {
             if (mtrkEvents == null) return 0;
             var t = (float)playable.GetTime() % DurationInSecond;
@@ -113,13 +113,13 @@ namespace Klak.Timeline.Midi
 
         float previousTime;
 
-        public override void OnGraphStart(Playable playable)
+        public override void OnGraphStart(UnityEngine.Playables.Playable playable)
         {
             previousTime = (float)playable.GetTime();
             player.ResetHead(previousTime);
         }
 
-        public override void OnBehaviourPause(Playable playable, FrameData info)
+        public override void OnBehaviourPause(UnityEngine.Playables.Playable playable, FrameData info)
         {
             // When the playable is being finished, signals laying in the rest
             // of the clip should be all triggered.
@@ -128,7 +128,7 @@ namespace Klak.Timeline.Midi
             player.Play((float)playable.GetDuration(), pushAction);
         }
 
-        public override void PrepareFrame(Playable playable, FrameData info)
+        public override void PrepareFrame(UnityEngine.Playables.Playable playable, FrameData info)
         {
             var pushAction = GetPushAction(playable, info);
             var currentTime = (float)playable.GetTime();
@@ -143,7 +143,7 @@ namespace Klak.Timeline.Midi
 
         MidiSignalPool _signalPool = new MidiSignalPool();
 
-        Action<MTrkEvent> GetPushAction(Playable playable, FrameData info)
+        Action<MTrkEvent> GetPushAction(UnityEngine.Playables.Playable playable, FrameData info)
         {
             return e =>
                 info.output.PushNotification(playable, _signalPool.Allocate(e));

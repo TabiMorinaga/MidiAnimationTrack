@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable
 {
     // ScriptableObject class used for storing a MIDI file asset
     sealed public class MidiFileAsset : ScriptableObject

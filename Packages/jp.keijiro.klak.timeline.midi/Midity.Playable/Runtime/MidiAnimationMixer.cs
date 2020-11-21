@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Playables;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable
 {
     // Runtime playable class that manages a MIDI animation track (clips and
     // its assigned controls)
@@ -18,7 +18,7 @@ namespace Klak.Timeline.Midi
 
         ControlAction[] _actions;
 
-        public override void OnPlayableCreate(Playable playable)
+        public override void OnPlayableCreate(UnityEngine.Playables.Playable playable)
         {
             var resolver = playable.GetGraph().GetResolver();
 
@@ -32,7 +32,7 @@ namespace Klak.Timeline.Midi
                 );
         }
 
-        public override void ProcessFrame(Playable playable, FrameData info, object playerData)
+        public override void ProcessFrame(UnityEngine.Playables.Playable playable, FrameData info, object playerData)
         {
             for (var ci = 0; ci < controls.Length; ci++)
             {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable
 {
     // MIDI control class and related structs and enums
 

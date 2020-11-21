@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable
 {
     // Object pool class for MIDI signals
     sealed class MidiSignalPool

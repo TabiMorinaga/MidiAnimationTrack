@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Klak.Timeline.Midi
+namespace Midity
 {
     // SMF file deserializer implementation
     public static class MidiFileDeserializer

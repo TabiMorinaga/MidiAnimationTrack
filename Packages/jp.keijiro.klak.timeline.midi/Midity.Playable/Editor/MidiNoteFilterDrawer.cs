@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable.Editor
 {
     // Custom property drawer for MidiNoteFilter struct
     [CustomPropertyDrawer(typeof(MidiNoteFilter), true)]

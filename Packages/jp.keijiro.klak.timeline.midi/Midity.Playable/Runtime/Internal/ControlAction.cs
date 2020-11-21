@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable
 {
     //
     // ControlAction class that invokes a property setter implemented in a

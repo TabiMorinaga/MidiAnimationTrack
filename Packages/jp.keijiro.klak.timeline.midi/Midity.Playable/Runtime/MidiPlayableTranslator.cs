@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Timeline;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable
 {
     public static class MidiPlayableTranslator
     {

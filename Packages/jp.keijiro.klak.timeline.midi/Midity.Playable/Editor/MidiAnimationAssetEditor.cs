@@ -3,12 +3,12 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable.Editor
 {
     // Custom inspector for MIDI assets
     // There is no editable property; It just shows some infomation.
     [CustomEditor(typeof(MidiAnimationAsset))]
-    class MidiAnimationAssetEditor : Editor
+    class MidiAnimationAssetEditor : UnityEditor.Editor
     {
         string _tempoText;
         string _durationText;

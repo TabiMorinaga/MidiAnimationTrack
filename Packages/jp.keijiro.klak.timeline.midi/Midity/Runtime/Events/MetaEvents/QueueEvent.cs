@@ -1,4 +1,4 @@
-﻿namespace Klak.Timeline.Midi
+﻿namespace Midity
 {
     [System.Serializable]
     public sealed class QueueEvent : MTrkEvent

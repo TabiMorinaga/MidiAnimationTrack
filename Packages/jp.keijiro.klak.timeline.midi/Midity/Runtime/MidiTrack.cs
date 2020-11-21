@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Klak.Timeline.Midi
+namespace Midity
 {
     public class MidiTrack
     {

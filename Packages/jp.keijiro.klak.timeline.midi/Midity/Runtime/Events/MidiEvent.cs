@@ -1,4 +1,4 @@
-﻿namespace Klak.Timeline.Midi
+﻿namespace Midity
 {
     // MIDI note event raw data struct
     [System.Serializable]

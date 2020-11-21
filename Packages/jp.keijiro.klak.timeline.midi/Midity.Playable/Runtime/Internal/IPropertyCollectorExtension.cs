@@ -3,7 +3,7 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.Timeline;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable
 {
     //
     // Extension methods for IPropertyCollector

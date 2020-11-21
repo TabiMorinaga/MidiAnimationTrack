@@ -1,11 +1,11 @@
 using UnityEngine;
 using UnityEditor;
 
-namespace Klak.Timeline.Midi
+namespace Midity.Playable.Editor
 {
     // Custom inspector for MidiSignalReceiver
     [CustomEditor(typeof(MidiSignalReceiver))]
-    sealed class MidiSignalReceiverEditor : Editor
+    sealed class MidiSignalReceiverEditor : UnityEditor.Editor
     {
         SerializedProperty _noteFilter;
         SerializedProperty _noteOnEvent;
