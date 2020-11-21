@@ -1,39 +1,30 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Timeline", "Unity.Timeline.csproj", "{3adee274-1f61-4939-1c08-082d794747bc}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "goma_recorder.Midity.Runtime", "goma_recorder.Midity.Runtime.csproj", "{368aa5d9-0770-c28f-58a4-110b4ba533b1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Klak.Midi", "Klak.Midi.csproj", "{636762df-70f6-bc0b-1896-653a867497b3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "goma_recorder.Midity.Playable.Runtime", "goma_recorder.Midity.Playable.Runtime.csproj", "{b04b4146-3a55-a980-53e9-8746cd05b73e}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Klak.Timeline.Midi", "Klak.Timeline.Midi.csproj", "{3b56046b-4453-745b-dd45-cb184077620a}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.Timeline.Editor", "Unity.Timeline.Editor.csproj", "{786b4fed-5bfa-1ccd-a1cf-6fa34b2a99be}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Klak.Timeline.Midi.Editor", "Klak.Timeline.Midi.Editor.csproj", "{5cfa6499-bba3-b036-8d61-d620d3c6e797}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.VisualStudio.Editor", "Unity.VisualStudio.Editor.csproj", "{3b1b2197-0afe-1327-7f55-989f9587e0c4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Unity.VSCode.Editor", "Unity.VSCode.Editor.csproj", "{dc7a8772-fc44-e3be-2215-5031450966c0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "goma_recorder.Midity.Playable.Editor", "goma_recorder.Midity.Playable.Editor.csproj", "{fd37505d-cd9e-8c5b-1f2b-80709b9c9b8f}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3adee274-1f61-4939-1c08-082d794747bc}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3adee274-1f61-4939-1c08-082d794747bc}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{636762df-70f6-bc0b-1896-653a867497b3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{636762df-70f6-bc0b-1896-653a867497b3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3b56046b-4453-745b-dd45-cb184077620a}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3b56046b-4453-745b-dd45-cb184077620a}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{786b4fed-5bfa-1ccd-a1cf-6fa34b2a99be}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{786b4fed-5bfa-1ccd-a1cf-6fa34b2a99be}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5cfa6499-bba3-b036-8d61-d620d3c6e797}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5cfa6499-bba3-b036-8d61-d620d3c6e797}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3b1b2197-0afe-1327-7f55-989f9587e0c4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3b1b2197-0afe-1327-7f55-989f9587e0c4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{dc7a8772-fc44-e3be-2215-5031450966c0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{dc7a8772-fc44-e3be-2215-5031450966c0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{368aa5d9-0770-c28f-58a4-110b4ba533b1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{368aa5d9-0770-c28f-58a4-110b4ba533b1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{368aa5d9-0770-c28f-58a4-110b4ba533b1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{368aa5d9-0770-c28f-58a4-110b4ba533b1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{b04b4146-3a55-a980-53e9-8746cd05b73e}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{b04b4146-3a55-a980-53e9-8746cd05b73e}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{b04b4146-3a55-a980-53e9-8746cd05b73e}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{b04b4146-3a55-a980-53e9-8746cd05b73e}.Release|Any CPU.Build.0 = Release|Any CPU
+		{fd37505d-cd9e-8c5b-1f2b-80709b9c9b8f}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{fd37505d-cd9e-8c5b-1f2b-80709b9c9b8f}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{fd37505d-cd9e-8c5b-1f2b-80709b9c9b8f}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{fd37505d-cd9e-8c5b-1f2b-80709b9c9b8f}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
