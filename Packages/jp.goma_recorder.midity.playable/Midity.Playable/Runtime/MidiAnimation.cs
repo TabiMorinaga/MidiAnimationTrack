@@ -156,14 +156,14 @@ namespace Midity.Playable
         (int i0, int i1) GetCCEventIndexAroundTick(uint tick, int ccNumber)
         {
             var last = -1;
+            var time = 0u;
             for (var i = 0; i < mtrkEvents.Count; i++)
             {
-                if (mtrkEvents[i] is MidiEvent e)
-                {
-                    if (!e.IsCC || e.data1 != ccNumber) continue;
-                    if (e.time > tick) return (last, i);
-                    last = i;
-                }
+                time += mtrkEvents[i].ticks;
+                if (!(mtrkEvents[i] is MidiEvent e)) continue;
+                if (!e.IsCC || e.data1 != ccNumber) continue;
+                if (time > tick) return (last, i);
+                last = i;
             }
             return (last, last);
         }
@@ -172,14 +172,14 @@ namespace Midity.Playable
         {
             var iOn = -1;
             var iOff = -1;
+            var time = 0u;
             for (var i = 0; i < mtrkEvents.Count; i++)
             {
-                if (mtrkEvents[i] is MidiEvent e)
-                {
-                    if (e.time > tick) break;
-                    if (!note.Check(e)) continue;
-                    if (e.IsNoteOn) iOn = i; else iOff = i;
-                }
+                time += mtrkEvents[i].ticks;
+                if (!(mtrkEvents[i] is MidiEvent e)) continue;
+                if (time > tick) break;
+                if (!note.Check(e)) continue;
+                if (e.IsNoteOn) iOn = i; else iOff = i;
             }
             return (iOn, iOff);
         }

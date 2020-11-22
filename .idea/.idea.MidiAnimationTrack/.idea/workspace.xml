@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="7c22a740-e22f-4d03-952e-bcc1a8353fad" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.MidiAnimationTrack/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.MidiAnimationTrack/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/jp.goma_recorder.midity.playable/Midity.Playable/Runtime/MidiAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.goma_recorder.midity.playable/Midity.Playable/Runtime/MidiAnimation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Packages/jp.goma_recorder.midity.playable/Midity/Runtime/MidiTrack.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/jp.goma_recorder.midity.playable/Midity/Runtime/MidiTrack.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +25,8 @@
         <option value="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiAnimationAssetEditor.cs" />
         <option value="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/Midity.Playable/Editor/MidiAnimationTrackEditor.cs" />
         <option value="$PROJECT_DIR$/Packages/jp.keijiro.klak.timeline.midi/package.json" />
+        <option value="$PROJECT_DIR$/Packages/jp.goma_recorder.midity.playable/Midity/Runtime/MidiTrack.cs" />
+        <option value="$PROJECT_DIR$/Packages/jp.goma_recorder.midity.playable/Midity.Playable/Runtime/MidiAnimation.cs" />
       </list>
     </option>
   </component>
@@ -84,9 +89,13 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="271" y="92" width="672" height="678" key="search.everywhere.popup" timestamp="1605964470015">
+    <state x="94" y="94" width="1028" height="583" key="VCS.FileHistoryDialog" timestamp="1606020125954">
       <screen x="0" y="0" width="1216" height="771" />
     </state>
-    <state x="271" y="92" width="672" height="678" key="search.everywhere.popup/0.0.1216.771/179.-1152.2048.1112@0.0.1216.771" timestamp="1605964470015" />
+    <state x="94" y="94" width="1028" height="583" key="VCS.FileHistoryDialog/0.0.1216.771/179.-1152.2048.1112@0.0.1216.771" timestamp="1606020125954" />
+    <state x="271" y="92" width="672" height="678" key="search.everywhere.popup" timestamp="1606020007336">
+      <screen x="0" y="0" width="1216" height="771" />
+    </state>
+    <state x="271" y="92" width="672" height="678" key="search.everywhere.popup/0.0.1216.771/179.-1152.2048.1112@0.0.1216.771" timestamp="1606020007336" />
   </component>
 </project>
