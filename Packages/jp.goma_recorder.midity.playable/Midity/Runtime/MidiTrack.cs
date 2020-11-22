@@ -20,6 +20,33 @@ namespace Midity
         public float ConvertTicksToSecond(uint tick)
             => tick * 60 / (tempo * ticksPerQuarterNote);
 
+        public bool GetAbstractTick(MTrkEvent mTrkEvent, out uint ticks)
+        {
+            ticks = 0u;
+            foreach (var e in events)
+            {
+                ticks += e.ticks;
+                if (e == mTrkEvent)
+                    return true;
+            }
+            ticks = 0u;
+            return false;
+        }
+
+        public bool GetAbstractTime(MTrkEvent mTrkEvent, out float time)
+        {
+            if (GetAbstractTick(mTrkEvent, out var tick))
+            {
+                time = ConvertTicksToSecond(tick);
+                return true;
+            }
+            else
+            {
+                time = 0f;
+                return false;
+            }
+        }
+
         #endregion
     }
 }

@@ -66,7 +66,6 @@ namespace Midity.Playable
                 void AddList<T>(T mEvent, List<MTrkEventHolder<T>> list) where T : MTrkEvent
                 {
                     mEvent.ticks += offset;
-                    mEvent.time += offset;
                     list.Add(new MTrkEventHolder<T>(index, mEvent));
                     offset = 0u;
                     index++;
