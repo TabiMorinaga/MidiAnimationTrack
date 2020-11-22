@@ -1,7 +1,7 @@
 Playable Midi for Unity Timeline
 =======================================
 
-![Ableton](./(~|)docs/daw.png)
+![Ableton](./docs/daw.png|./~docs/daw.png)
 ![Unity](./docs/play_demo.gif)
 
 **Playable Midi** is a custom timeline/playables package that provides
