@@ -11,6 +11,7 @@ synchronized animation using a DAW (digital audio workstation) that is easy
 to manage accurately synchronized timings compared to other non-musical
 timeline editors like Unity's one.
 
+
 System requirements
 -------------------
 
