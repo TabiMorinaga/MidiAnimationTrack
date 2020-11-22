@@ -45,6 +45,7 @@
     <property name="node.js.path.for.package.tslint" value="project" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
+    <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
@@ -89,13 +90,19 @@
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="378" y="-1107" key="SettingsEditor" timestamp="1606024699568">
+      <screen x="179" y="-1152" width="2048" height="1112" />
+    </state>
+    <state x="118" y="31" key="SettingsEditor/0.0.1216.771/179.-1152.2048.1112@0.0.1216.771" timestamp="1606023066736" />
+    <state x="378" y="-1107" key="SettingsEditor/0.0.1216.771/179.-1152.2048.1112@179.-1152.2048.1112" timestamp="1606024699568" />
     <state x="94" y="94" width="1028" height="583" key="VCS.FileHistoryDialog" timestamp="1606020125954">
       <screen x="0" y="0" width="1216" height="771" />
     </state>
     <state x="94" y="94" width="1028" height="583" key="VCS.FileHistoryDialog/0.0.1216.771/179.-1152.2048.1112@0.0.1216.771" timestamp="1606020125954" />
-    <state x="271" y="92" width="672" height="678" key="search.everywhere.popup" timestamp="1606020007336">
-      <screen x="0" y="0" width="1216" height="771" />
+    <state x="635" y="-1019" width="1132" height="978" key="search.everywhere.popup" timestamp="1606023915149">
+      <screen x="179" y="-1152" width="2048" height="1112" />
     </state>
-    <state x="271" y="92" width="672" height="678" key="search.everywhere.popup/0.0.1216.771/179.-1152.2048.1112@0.0.1216.771" timestamp="1606020007336" />
+    <state x="271" y="92" width="672" height="678" key="search.everywhere.popup/0.0.1216.771/179.-1152.2048.1112@0.0.1216.771" timestamp="1606022946928" />
+    <state x="635" y="-1019" width="1132" height="978" key="search.everywhere.popup/0.0.1216.771/179.-1152.2048.1112@179.-1152.2048.1112" timestamp="1606023915149" />
   </component>
 </project>

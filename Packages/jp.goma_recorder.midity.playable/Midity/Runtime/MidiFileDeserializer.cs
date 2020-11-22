@@ -123,7 +123,6 @@ namespace Midity
                     return new SequenceNumberEvent
                     {
                         ticks = ticks,
-                        time = allTicks,
                         number = reader.ReadBytes(length),
                     };
                 // 01
@@ -131,7 +130,6 @@ namespace Midity
                     return new TextEvent
                     {
                         ticks = ticks,
-                        time = allTicks,
                         text = reader.ReadChars(length),
                     };
                 // 02
@@ -139,14 +137,12 @@ namespace Midity
                     return new CopyrightEvent
                     {
                         ticks = ticks,
-                        time = allTicks,
                         text = reader.ReadChars(length),
                     };
                 // 03
                 case TrackNameEvent.status:
                     return new TrackNameEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         name = reader.ReadChars(length),
                     };
@@ -154,7 +150,6 @@ namespace Midity
                 case InstrumentNameEvent.status:
                     return new InstrumentNameEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         name = reader.ReadChars(length),
                     };
@@ -162,7 +157,6 @@ namespace Midity
                 case LyricEvent.status:
                     return new LyricEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         lyric = reader.ReadChars(length),
                     };
@@ -170,7 +164,6 @@ namespace Midity
                 case MarkerEvent.status:
                     return new MarkerEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         text = reader.ReadChars(length),
                     };
@@ -178,7 +171,6 @@ namespace Midity
                 case QueueEvent.status:
                     return new QueueEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         text = reader.ReadChars(length),
                     };
@@ -186,7 +178,6 @@ namespace Midity
                 case ChannelPrefixEvent.status:
                     return new ChannelPrefixEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         data = reader.ReadByte(),
                     };
@@ -194,7 +185,6 @@ namespace Midity
                 case EndPointEvent.status:
                     return new EndPointEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                     };
                 // 51
@@ -202,7 +192,6 @@ namespace Midity
                     var tickTempo = reader.ReadBEUInt((byte)length);
                     return new TempoEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         tickTempo = tickTempo,
                     };
@@ -210,7 +199,6 @@ namespace Midity
                 case SmpteOffsetEvent.status:
                     return new SmpteOffsetEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         data = reader.ReadBytes(length),
                     };
@@ -218,7 +206,6 @@ namespace Midity
                 case BeatEvent.status:
                     return new BeatEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         data = reader.ReadBytes(length),
                     };
@@ -228,7 +215,6 @@ namespace Midity
                     var mi = reader.ReadByte();
                     return new KeyEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         sf = sf,
                         isMajor = mi == 1,
@@ -237,7 +223,6 @@ namespace Midity
                 case SequencerUniqueEvent.status:
                     return new SequencerUniqueEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         data = reader.ReadBytes(length),
                     };
@@ -245,7 +230,6 @@ namespace Midity
                 default:
                     return new UnknownEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         bytes = reader.ReadBytes(length),
                     };
@@ -261,7 +245,6 @@ namespace Midity
                 if (data == 0xf7u)
                     return new UnknownEvent
                     {
-                        time = allTicks,
                         ticks = ticks,
                         bytes = bytes.ToArray(),
                     };
@@ -273,7 +256,6 @@ namespace Midity
             var b2 = (stat & 0xe0u) == 0xc0u ? (byte)0 : reader.ReadByte();
             return new MidiEvent
             {
-                time = allTicks,
                 ticks = ticks,
                 status = stat,
                 data1 = b1,
