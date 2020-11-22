@@ -1,76 +1,34 @@
-MIDI Animation Track for Unity Timeline
+Playable Midi for Unity Timeline
 =======================================
 
 ![Ableton](https://i.imgur.com/yxJr18E.png)
 ![Unity](https://i.imgur.com/aTMgdnB.gif)
 
-**MIDI Animation Track** is a custom timeline/playables package that provides
+**Playable Midi** is a custom timeline/playables package that provides
 functionality to control object properties based on sequence data contained
 in a standard MIDI file (`.mid` file). This allows you to create musically
 synchronized animation using a DAW (digital audio workstation) that is easy
 to manage accurately synchronized timings compared to other non-musical
 timeline editors like Unity's one.
 
+
 System requirements
 -------------------
 
-- Unity 2019.1 or later
+- Unity 2020.1 or later
 
 Installation
 ------------
 
 <!--4567890123456789012345678901234567890123456789012345678901234567890123456-->
-This package is distributed via the [npmjs] registry. You can import it using
-the [scoped registry] feature of Unity Package Manager.
-
-To import the package, please add the following sections to the package
-manifest file (`Packages/manifest.json`).
-
-To the `scopedRegistries` section:
-
-```
-{
-  "name": "Keijiro",
-  "url": "https://registry.npmjs.com",
-  "scopes": [ "jp.keijiro" ]
-}
-```
-
-To the `dependencies` section:
-
-```
-"jp.keijiro.klak.timeline.midi": "1.0.3"
-```
-
-After changes, the manifest file should look like below:
-
-```
-{
-  "scopedRegistries": [
-    {
-      "name": "Keijiro",
-      "url": "https://registry.npmjs.com",
-      "scopes": [ "jp.keijiro" ]
-    }
-  ],
-  "dependencies": {
-    "jp.keijiro.klak.timeline.midi": "1.0.3",
-    ...
-```
-
-[npmjs]: https://www.npmjs.com/
-[scoped registry]: https://docs.unity3d.com/Manual/upm-scoped.html
+`Window -> Package Manager -> +▼ -> Add package from git url`
+ - `https://github.com/TabiMorinaga/PlayableMidi.git?#upm`
 
 Importing .mid files
 --------------------
 
 You can import a `.mid` file as an asset file. Simply drag and drop it to the
 project view, or navigate to "Assets" - "Import New Asset...".
-
-At the moment, the MIDI file importer doesn't support set-tempo meta events,
-so the sequence tempo value (BPM) must be manually specified in the inspector.
-
-![Inspector](https://i.imgur.com/Yap4Tn0.png)
 
 An imported asset may contain multiple tracks that are shown as sub-assets
 under it.
@@ -140,7 +98,7 @@ You can specify which **CC Number** the control reacts to.
 MIDI signals
 ------------
 
-A MIDI animation track also supports sending [Timeline Signals] on key-on/off
+A MIDI animation track also supports sending [Timeline Signals] on key-on/off and some Meta
 events. To receive MIDI events from a track, you can use the **MIDI Signal
 Receiver** component.
 
@@ -150,12 +108,9 @@ Receiver** component.
 ![Inspector](https://i.imgur.com/LAwiWel.png)
 
 1. Add the MIDI Signal Receiver component to a game object that receives MIDI
-   signals. 
+   signals.
 2. Specify which **Note/Octave** the receiver reacts to.
 3. Register methods to **Note On/Off Events**.
 4. Set the receiver game object as the output destination of the track.
 
 ![Output destination](https://i.imgur.com/PqYi9cN.gif)
-
-You can add multiple receiver components to a single game object. It's useful
-to invoke different methods for each note.
