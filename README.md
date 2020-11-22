@@ -2,7 +2,7 @@ Playable Midi for Unity Timeline
 =======================================
 
 ![Ableton](./(~|)docs/daw.png)
-![Unity](./docs/play_demo.git)
+![Unity](./docs/play_demo.gif)
 
 **Playable Midi** is a custom timeline/playables package that provides
 functionality to control object properties based on sequence data contained
